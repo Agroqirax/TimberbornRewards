@@ -15,7 +15,6 @@
     "Timberborn.Localization",
     "Timberborn.GameDistricts",
     "Timberborn.Goods",
-    "Timberborn.InventorySystem",
     "Timberborn.SimpleOutputBuildings"
   ],
   "autoReferenced": true,
