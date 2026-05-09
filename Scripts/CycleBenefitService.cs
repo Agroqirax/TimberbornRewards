@@ -8,8 +8,7 @@ namespace Agroqirax.Benefits
 {
     /// <summary>
     /// Listens for the start of each cycle, draws 3 benefits from the pool,
-    /// logs them to the Unity console / Player.log, and automatically applies
-    /// the first one until a proper selection UI is added.
+    /// and opens the selection panel for the player to choose one.
     /// </summary>
     public class CycleBenefitService : ILoadableSingleton
     {
@@ -18,18 +17,19 @@ namespace Agroqirax.Benefits
 
         private readonly EventBus _eventBus;
         private readonly BenefitPool _benefitPool;
+        private readonly BenefitSelectionPanel _selectionPanel;
         private readonly System.Random _random;
 
-        public CycleBenefitService(EventBus eventBus, BenefitPool benefitPool)
+        public CycleBenefitService(EventBus eventBus,
+                                   BenefitPool benefitPool,
+                                   BenefitSelectionPanel selectionPanel)
         {
-            _eventBus = eventBus;
-            _benefitPool = benefitPool;
-            _random = new System.Random();
+            _eventBus      = eventBus;
+            _benefitPool   = benefitPool;
+            _selectionPanel = selectionPanel;
+            _random        = new System.Random();
         }
 
-        // ILoadableSingleton.Load() is called after the game world finishes
-        // loading. Register here so we don't miss events that fire during load,
-        // exactly as GameCycleService does it.
         public void Load()
         {
             _eventBus.Register(this);
@@ -39,35 +39,31 @@ namespace Agroqirax.Benefits
         [OnEvent]
         public void OnCycleStarted(CycleStartedEvent cycleStartedEvent)
         {
-            // Skip cycle 1 (game start) — first reward arrives at cycle 2.
-            // Remove this guard if you want a reward on the very first cycle.
             if (cycleStartedEvent.Cycle <= 1)
             {
-                Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} started — skipping first cycle.");
+                Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} — skipping first cycle.");
                 return;
             }
 
-            Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} started — drawing benefits.");
+            Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} started — offering benefits.");
 
             List<IBenefit> offered = DrawBenefits(OfferedCount);
             LogOfferedBenefits(cycleStartedEvent.Cycle, offered);
 
-            // Auto-select index 0 until UI is implemented.
-            IBenefit selected = offered[0];
-            Debug.Log($"{Tag} Auto-selecting option 1: {selected.DisplayName}");
-            selected.Apply();
-            Debug.Log($"{Tag} Applied: {selected.DisplayName}");
+            _selectionPanel.ShowFor(offered, OnBenefitChosen);
+        }
+
+        private void OnBenefitChosen(IBenefit benefit)
+        {
+            Debug.Log($"{Tag} Applying: {benefit.DisplayName}");
+            benefit.Apply();
+            Debug.Log($"{Tag} Done.");
         }
 
         // -------------------------------------------------------------------
         // Helpers
         // -------------------------------------------------------------------
 
-        /// <summary>
-        /// Draws <paramref name="count"/> distinct entries from the pool using
-        /// a partial Fisher-Yates shuffle so the same pool entry is never
-        /// offered twice in one draw (even if duplicates exist in the pool).
-        /// </summary>
         private List<IBenefit> DrawBenefits(int count)
         {
             IReadOnlyList<IBenefit> pool = _benefitPool.All;
@@ -91,9 +87,7 @@ namespace Agroqirax.Benefits
         {
             Debug.Log($"{Tag} === Cycle {cycle} — Choose a benefit ===");
             for (int i = 0; i < offered.Count; i++)
-            {
                 Debug.Log($"{Tag}   Option {i + 1}: {offered[i].DisplayName}");
-            }
         }
     }
 }
