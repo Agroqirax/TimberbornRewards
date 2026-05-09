@@ -1,0 +1,19 @@
+{
+  "name": "Agroqirax.Benefits",
+  "rootNamespace": "",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [
+    "Timberborn.ScienceSystem",
+    "Timberborn.GameCycleSystem",
+    "Timberborn.SingletonSystem",
+    "Bindito.Core"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

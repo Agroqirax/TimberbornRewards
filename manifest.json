@@ -1,0 +1,8 @@
+{
+  "Name": "Benefits",
+  "Version": "0.1",
+  "Id": "Agroqirax.Benefits",
+  "MinimumGameVersion": "1.0.7.0",
+  "Description": "Adds a benefit selector at the start of each cycle.",
+  "RequiredMods": []
+}
