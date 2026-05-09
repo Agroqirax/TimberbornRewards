@@ -1,50 +1,68 @@
 using System.Collections.Generic;
+using Timberborn.GameDistricts;
 using Timberborn.ScienceSystem;
 
 namespace Agroqirax.Benefits
 {
     /// <summary>
-    /// Holds every possible benefit that can be offered to the player.
-    /// Add new benefit types here as the mod grows.
-    ///
-    /// This is a singleton injected by Bindito; it takes ScienceService as a
-    /// dependency so it can construct SciencePointBenefits without the caller
-    /// needing to know about the concrete type.
+    /// Holds the full pool of benefits that can be offered each cycle.
+    /// Duplicates act as weights — two copies = twice the draw probability.
     /// </summary>
     public class BenefitPool
     {
         private readonly ScienceService _scienceService;
+        private readonly DistrictCenterRegistry _districtCenterRegistry;
 
-        // All benefits available in the pool.
-        // Duplicates are intentional: a higher-value benefit can appear more
-        // than once to adjust effective draw probability if desired.
         private List<IBenefit>? _pool;
 
-        public BenefitPool(ScienceService scienceService)
+        public BenefitPool(ScienceService scienceService,
+                           DistrictCenterRegistry districtCenterRegistry)
         {
-            _scienceService = scienceService;
+            _scienceService          = scienceService;
+            _districtCenterRegistry  = districtCenterRegistry;
         }
 
-        /// <summary>
-        /// Returns the full pool, constructing it lazily on first access.
-        /// </summary>
         public IReadOnlyList<IBenefit> All => _pool ??= BuildPool();
 
         private List<IBenefit> BuildPool()
         {
             return new List<IBenefit>
             {
-                // Science point tiers — small, medium, large
-                new SciencePointBenefit(_scienceService, 50),
-                new SciencePointBenefit(_scienceService, 50),   // two copies → slightly higher draw chance
-                new SciencePointBenefit(_scienceService, 150),
-                new SciencePointBenefit(_scienceService, 150),
-                new SciencePointBenefit(_scienceService, 300),
-                new SciencePointBenefit(_scienceService, 500),
+                // ----- Science points -----
+                Science(50),
+                Science(50),
+                Science(150),
+                Science(150),
+                Science(300),
+                Science(500),
 
-                // More benefit types will go here once UI and resource rewards
-                // are implemented (e.g. ResourceBenefit, HealBeaversBenefit, …)
+                // ----- Resources -----
+                // Logs — common, lower amounts
+                Resource("Log",       30,  "sprites/goods/LogIcon"),
+                Resource("Log",       60,  "sprites/goods/LogIcon"),
+                // Planks
+                Resource("Plank",     20,  "sprites/goods/PlankIcon"),
+                Resource("Plank",     40,  "sprites/goods/PlankIcon"),
+                // Food
+                Resource("Carrot",    40,  "sprites/goods/CarrotIcon"),
+                Resource("Blueberry", 40,  "sprites/goods/BlueberryIcon"),
+                // Gear
+                Resource("Gear",      10,  "sprites/goods/GearIcon"),
+                Resource("Gear",      20,  "sprites/goods/GearIcon"),
+                // Paper
+                Resource("Paper",     15,  "sprites/goods/PaperIcon"),
+                Resource("Paper",     30,  "sprites/goods/PaperIcon"),
             };
         }
+
+        // ---------------------------------------------------------------
+        // Convenience factory methods — keep BuildPool readable
+        // ---------------------------------------------------------------
+
+        private IBenefit Science(int amount)
+            => new SciencePointBenefit(_scienceService, amount);
+
+        private IBenefit Resource(string goodId, int amount, string iconPath)
+            => new ResourceBenefit(_districtCenterRegistry, goodId, amount, iconPath);
     }
 }

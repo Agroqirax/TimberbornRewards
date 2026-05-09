@@ -12,7 +12,11 @@
     "Timberborn.SingletonSystem",
     "Bindito.Core",
     "Timberborn.AssetSystem",
-    "Timberborn.Localization"
+    "Timberborn.Localization",
+    "Timberborn.GameDistricts",
+    "Timberborn.Goods",
+    "Timberborn.InventorySystem",
+    "Timberborn.SimpleOutputBuildings"
   ],
   "autoReferenced": true,
   "defineConstraints": [],
