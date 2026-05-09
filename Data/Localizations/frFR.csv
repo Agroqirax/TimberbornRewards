@@ -1,0 +1,3 @@
+ID,Text,Comment
+CycleBenefit.ChooseTitle,Choisissez un avantage de cycle,Title shown at the top of the benefit selection panel
+CycleBenefit.SciencePoints,+{0} Points de science,{0} is the amount e.g. "+150 Science Points"

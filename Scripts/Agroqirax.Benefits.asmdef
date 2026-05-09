@@ -10,7 +10,9 @@
     "Timberborn.ScienceSystem",
     "Timberborn.GameCycleSystem",
     "Timberborn.SingletonSystem",
-    "Bindito.Core"
+    "Bindito.Core",
+    "Timberborn.AssetSystem",
+    "Timberborn.Localization"
   ],
   "autoReferenced": true,
   "defineConstraints": [],

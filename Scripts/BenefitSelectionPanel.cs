@@ -1,51 +1,37 @@
 using System;
 using System.Collections.Generic;
+using Timberborn.AssetSystem;
 using Timberborn.CoreUI;
+using Timberborn.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Agroqirax.Benefits
 {
-    /// <summary>
-    /// Modal panel shown at cycle start. Presents 3 benefit options as buttons;
-    /// the player must click one — there is no dismiss/cancel (Mini Metro style).
-    ///
-    /// Pushed onto the PanelStack via PushDialog, which automatically:
-    ///   - wraps us in the game's standard darkened overlay
-    ///   - pauses game speed
-    ///   - hooks up the input system
-    /// </summary>
     public class BenefitSelectionPanel : IPanelController
     {
-        // CSS classes borrowed from the game's own entity panel / dialog styling.
-        // These give us the standard Timberborn look for free.
-        private static readonly string PanelClass        = "entity-sub-panel";
-        private static readonly string PanelBgClass      = "bg-sub-box--brown";
-        private static readonly string TitleClass        = "text--bold";
-        private static readonly string ButtonClass       = "entity-fragment__button";
-        private static readonly string ButtonGreenClass  = "entity-fragment__button--green";
+        private static readonly string CoreStylePath   = "UI/Views/Core/CoreStyle";
+        private static readonly string CommonStylePath = "UI/Views/Common/CommonMiscStyle";
+        private static readonly string TitleLocKey     = "CycleBenefit.ChooseTitle";
 
         private readonly PanelStack _panelStack;
+        private readonly IAssetLoader _assetLoader;
+        private readonly ILoc _loc;
 
-        // Set before pushing — the panel reads these to build its buttons.
         private List<IBenefit> _offered = new();
         private Action<IBenefit>? _onChosen;
 
-        private VisualElement? _root;
-
-        public BenefitSelectionPanel(PanelStack panelStack)
+        public BenefitSelectionPanel(PanelStack panelStack, IAssetLoader assetLoader, ILoc loc)
         {
             _panelStack = panelStack;
+            _assetLoader = assetLoader;
+            _loc = loc;
         }
 
-        /// <summary>
-        /// Call this to configure the panel's contents, then push it onto the stack.
-        /// </summary>
         public void ShowFor(List<IBenefit> offered, Action<IBenefit> onChosen)
         {
             _offered  = offered;
             _onChosen = onChosen;
-            _root     = null;   // force a fresh build next GetPanel() call
             _panelStack.PushDialog(this);
         }
 
@@ -53,26 +39,12 @@ namespace Agroqirax.Benefits
         // IPanelController
         // ---------------------------------------------------------------
 
-        public VisualElement GetPanel()
-        {
-            _root = BuildPanel();
-            return _root;
-        }
-
-        /// <summary>
-        /// Keyboard confirm (Enter/Gamepad A) selects the first option,
-        /// mirroring the auto-select behaviour we had before.
-        /// </summary>
+        public VisualElement GetPanel()  => BuildPanel();
         public bool OnUIConfirmed()
         {
-            if (_offered.Count > 0)
-                Choose(_offered[0]);
-            return true;  // true = play confirm sound
+            if (_offered.Count > 0) Choose(_offered[0]);
+            return true;
         }
-
-        /// <summary>
-        /// Cancel is a no-op — the player must make a choice.
-        /// </summary>
         public void OnUICancelled() { }
 
         // ---------------------------------------------------------------
@@ -81,47 +53,79 @@ namespace Agroqirax.Benefits
 
         private VisualElement BuildPanel()
         {
-            // Outer wrapper — centred by the overlay, sized to content
-            var panel = new NineSliceVisualElement();
-            panel.AddToClassList(PanelClass);
-            panel.AddToClassList(PanelBgClass);
-            panel.style.paddingTop    = 16;
-            panel.style.paddingBottom = 16;
-            panel.style.paddingLeft   = 24;
-            panel.style.paddingRight  = 24;
-            panel.style.minWidth      = 320;
+            var coreStyle   = _assetLoader.Load<StyleSheet>(CoreStylePath);
+            var commonStyle = _assetLoader.Load<StyleSheet>(CommonStylePath);
 
-            // Title label
-            var title = new Label("Choose a Cycle Benefit");
-            title.AddToClassList(TitleClass);
-            title.style.fontSize      = 18;
-            title.style.marginBottom  = 12;
-            title.style.alignSelf     = Align.Center;
-            panel.Add(title);
+            var wrapper = new VisualElement();
+            wrapper.styleSheets.Add(coreStyle);
+            wrapper.styleSheets.Add(commonStyle);
+            wrapper.style.flexGrow       = 1;
+            wrapper.style.alignItems     = Align.Center;
+            wrapper.style.justifyContent = Justify.Center;
 
-            // One button per offered benefit
-            for (int i = 0; i < _offered.Count; i++)
+            var box = new NineSliceVisualElement();
+            box.AddToClassList("options-box");
+            box.AddToClassList("sliced-border");
+            wrapper.Add(box);
+
+            var title = new Label(_loc.T(TitleLocKey));
+            title.style.color                       = Color.white;
+            title.style.fontSize                    = 18;
+            title.style.unityFontStyleAndWeight     = FontStyle.Bold;
+            title.style.marginBottom                = 12;
+            title.style.alignSelf                   = Align.Center;
+            box.Add(title);
+
+            foreach (var benefit in _offered)
+                box.Add(BuildBenefitButton(benefit));
+
+            return wrapper;
+        }
+
+        private VisualElement BuildBenefitButton(IBenefit benefit)
+        {
+            // Use button.text so the game's CSS hover colour applies to the
+            // text directly — child Label elements don't inherit color in UIToolkit.
+            var button = new MenuButton();
+            button.AddToClassList("menu-button");
+            button.AddToClassList("menu-button--stretched");
+            button.text = benefit.GetDisplayName(_loc);
+            button.style.flexDirection  = FlexDirection.Row;
+            button.style.alignItems     = Align.Center;
+            button.style.justifyContent = Justify.Center;
+            button.RegisterCallback<ClickEvent>(_ => Choose(benefit));
+
+            // Icon — placed as a sibling to the button's internal text element.
+            // We insert it at index 0 so it appears to the left of the text.
+            if (benefit.IconPath != null)
             {
-                IBenefit benefit = _offered[i];  // capture for lambda
-
-                var button = new Button();
-                button.text = benefit.DisplayName;
-                button.AddToClassList(ButtonClass);
-                button.AddToClassList(ButtonGreenClass);
-                button.style.marginTop    = 4;
-                button.style.marginBottom = 4;
-                button.style.color        = UnityEngine.Color.white;
-                button.RegisterCallback<ClickEvent>(_ => Choose(benefit));
-
-                panel.Add(button);
+                var sprite = _assetLoader.LoadSafe<Sprite>(benefit.IconPath);
+                if (sprite != null)
+                {
+                    var icon = new Image();
+                    icon.sprite              = sprite;
+                    icon.style.width         = 24;
+                    icon.style.height        = 24;
+                    icon.style.marginRight   = 10;
+                    icon.style.flexShrink    = 0;
+                    icon.scaleMode           = ScaleMode.ScaleToFit;
+                    // Image tint follows the button's current text colour so it
+                    // flips white↔black on hover automatically.
+                    icon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
+                    button.RegisterCallback<MouseEnterEvent>(_ =>
+                        icon.style.unityBackgroundImageTintColor = new StyleColor(Color.black));
+                    button.RegisterCallback<MouseLeaveEvent>(_ =>
+                        icon.style.unityBackgroundImageTintColor = new StyleColor(Color.white));
+                    button.Insert(0, icon);
+                }
             }
 
-            return panel;
+            return button;
         }
 
         private void Choose(IBenefit benefit)
         {
-            Debug.Log($"[CycleBenefit] Player chose: {benefit.DisplayName}");
+            Debug.Log($"[CycleBenefit] Player chose: {benefit.GetDisplayName(_loc)}");
             _panelStack.Pop(this);
             _onChosen?.Invoke(benefit);
         }

@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Timberborn.GameCycleSystem;
+using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using UnityEngine;
 
 namespace Agroqirax.Benefits
 {
-    /// <summary>
-    /// Listens for the start of each cycle, draws 3 benefits from the pool,
-    /// and opens the selection panel for the player to choose one.
-    /// </summary>
     public class CycleBenefitService : ILoadableSingleton
     {
         private const int OfferedCount = 3;
@@ -18,16 +15,17 @@ namespace Agroqirax.Benefits
         private readonly EventBus _eventBus;
         private readonly BenefitPool _benefitPool;
         private readonly BenefitSelectionPanel _selectionPanel;
+        private readonly ILoc _loc;
         private readonly System.Random _random;
 
-        public CycleBenefitService(EventBus eventBus,
-                                   BenefitPool benefitPool,
-                                   BenefitSelectionPanel selectionPanel)
+        public CycleBenefitService(EventBus eventBus, BenefitPool benefitPool,
+                                   BenefitSelectionPanel selectionPanel, ILoc loc)
         {
-            _eventBus      = eventBus;
-            _benefitPool   = benefitPool;
+            _eventBus       = eventBus;
+            _benefitPool    = benefitPool;
             _selectionPanel = selectionPanel;
-            _random        = new System.Random();
+            _loc            = loc;
+            _random         = new System.Random();
         }
 
         public void Load()
@@ -46,23 +44,17 @@ namespace Agroqirax.Benefits
             }
 
             Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} started — offering benefits.");
-
             List<IBenefit> offered = DrawBenefits(OfferedCount);
             LogOfferedBenefits(cycleStartedEvent.Cycle, offered);
-
             _selectionPanel.ShowFor(offered, OnBenefitChosen);
         }
 
         private void OnBenefitChosen(IBenefit benefit)
         {
-            Debug.Log($"{Tag} Applying: {benefit.DisplayName}");
+            Debug.Log($"{Tag} Applying: {benefit.GetDisplayName(_loc)}");
             benefit.Apply();
             Debug.Log($"{Tag} Done.");
         }
-
-        // -------------------------------------------------------------------
-        // Helpers
-        // -------------------------------------------------------------------
 
         private List<IBenefit> DrawBenefits(int count)
         {
@@ -79,15 +71,14 @@ namespace Agroqirax.Benefits
                 (indices[i], indices[j]) = (indices[j], indices[i]);
                 result.Add(pool[indices[i]]);
             }
-
             return result;
         }
 
-        private static void LogOfferedBenefits(int cycle, List<IBenefit> offered)
+        private void LogOfferedBenefits(int cycle, List<IBenefit> offered)
         {
             Debug.Log($"{Tag} === Cycle {cycle} — Choose a benefit ===");
             for (int i = 0; i < offered.Count; i++)
-                Debug.Log($"{Tag}   Option {i + 1}: {offered[i].DisplayName}");
+                Debug.Log($"{Tag}   Option {i + 1}: {offered[i].GetDisplayName(_loc)}");
         }
     }
 }

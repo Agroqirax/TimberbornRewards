@@ -1,16 +1,17 @@
+using Timberborn.Localization;
 using Timberborn.ScienceSystem;
 
 namespace Agroqirax.Benefits
 {
-    /// <summary>
-    /// A benefit that grants the player a fixed number of science points.
-    /// </summary>
     public class SciencePointBenefit : IBenefit
     {
+        private static readonly string LocKey = "CycleBenefit.SciencePoints";
+        public static readonly string SharedIconPath = "sprites/topbar/Science";
+
         private readonly ScienceService _scienceService;
         private readonly int _amount;
 
-        public string DisplayName => $"+{_amount} Science Points";
+        public string? IconPath => SharedIconPath;
 
         public SciencePointBenefit(ScienceService scienceService, int amount)
         {
@@ -18,9 +19,8 @@ namespace Agroqirax.Benefits
             _amount = amount;
         }
 
-        public void Apply()
-        {
-            _scienceService.AddPoints(_amount);
-        }
+        public string GetDisplayName(ILoc loc) => loc.T(LocKey, _amount);
+
+        public void Apply() => _scienceService.AddPoints(_amount);
     }
 }
