@@ -1,68 +1,66 @@
 using System.Collections.Generic;
+using Timberborn.BlueprintSystem;
 using Timberborn.GameDistricts;
 using Timberborn.ScienceSystem;
+using UnityEngine;
 
 namespace Agroqirax.Benefits
 {
-    /// <summary>
-    /// Holds the full pool of benefits that can be offered each cycle.
-    /// Duplicates act as weights — two copies = twice the draw probability.
-    /// </summary>
     public class BenefitPool
     {
+        private readonly ISpecService _specService;
         private readonly ScienceService _scienceService;
         private readonly DistrictCenterRegistry _districtCenterRegistry;
 
         private List<IBenefit>? _pool;
 
-        public BenefitPool(ScienceService scienceService,
+        public BenefitPool(ISpecService specService,
+                           ScienceService scienceService,
                            DistrictCenterRegistry districtCenterRegistry)
         {
-            _scienceService          = scienceService;
-            _districtCenterRegistry  = districtCenterRegistry;
+            _specService            = specService;
+            _scienceService         = scienceService;
+            _districtCenterRegistry = districtCenterRegistry;
         }
 
         public IReadOnlyList<IBenefit> All => _pool ??= BuildPool();
 
         private List<IBenefit> BuildPool()
         {
-            return new List<IBenefit>
-            {
-                // ----- Science points -----
-                Science(50),
-                Science(50),
-                Science(150),
-                Science(150),
-                Science(300),
-                Science(500),
+            var pool = new List<IBenefit>();
+            BenefitSpec spec = _specService.GetSingleSpec<BenefitSpec>();
 
-                // ----- Resources -----
-                // Logs — common, lower amounts
-                Resource("Log",       30,  "sprites/goods/LogIcon"),
-                Resource("Log",       60,  "sprites/goods/LogIcon"),
-                // Planks
-                Resource("Plank",     20,  "sprites/goods/PlankIcon"),
-                Resource("Plank",     40,  "sprites/goods/PlankIcon"),
-                // Food
-                Resource("Carrot",    40,  "sprites/goods/CarrotIcon"),
-                Resource("Blueberry", 40,  "sprites/goods/BlueberryIcon"),
-                // Gear
-                Resource("Gear",      10,  "sprites/goods/GearIcon"),
-                Resource("Gear",      20,  "sprites/goods/GearIcon"),
-                // Paper
-                Resource("Paper",     15,  "sprites/goods/PaperIcon"),
-                Resource("Paper",     30,  "sprites/goods/PaperIcon"),
-            };
+            foreach (BenefitEntrySpec entry in spec.Benefits)
+            {
+                IBenefit? benefit = CreateBenefit(entry);
+                if (benefit == null) continue;
+
+                int weight = entry.Weight > 0 ? entry.Weight : 1;
+                for (int i = 0; i < weight; i++)
+                    pool.Add(benefit);
+            }
+
+            return pool;
         }
 
-        // ---------------------------------------------------------------
-        // Convenience factory methods — keep BuildPool readable
-        // ---------------------------------------------------------------
+        private IBenefit? CreateBenefit(BenefitEntrySpec entry)
+        {
+            switch (entry.Type)
+            {
+                case "Science":
+                    return new SciencePointBenefit(_scienceService, entry.Amount);
 
-        private IBenefit Science(int amount)
-            => new SciencePointBenefit(_scienceService, amount);
+                case "Resource":
+                    return new ResourceBenefit(
+                        _districtCenterRegistry,
+                        entry.GoodId,
+                        entry.Amount,
+                        entry.IconPath);
 
-        private IBenefit Resource(string goodId, int amount, string iconPath)
-            => new ResourceBenefit(_districtCenterRegistry, goodId, amount, iconPath);
+                default:
+                    Debug.LogWarning($"[CycleBenefit] Unknown benefit type '{entry.Type}' — skipping.");
+                    return null;
+            }
+        }
     }
 }

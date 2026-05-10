@@ -6,11 +6,6 @@ using UnityEngine;
 
 namespace Agroqirax.Benefits
 {
-    /// <summary>
-    /// A benefit that delivers goods directly into the largest district
-    /// center's SimpleOutputInventory — the same storage that holds starting
-    /// berries and water, from which beavers haul goods out.
-    /// </summary>
     public class ResourceBenefit : IBenefit
     {
         private static readonly string LocKey = "CycleBenefit.Resource";
@@ -44,9 +39,7 @@ namespace Agroqirax.Benefits
                 return;
             }
 
-            SimpleOutputInventory outputInventory =
-                largest.GetComponent<SimpleOutputInventory>();
-
+            SimpleOutputInventory outputInventory = largest.GetComponent<SimpleOutputInventory>();
             if (outputInventory == null)
             {
                 Debug.LogWarning($"[CycleBenefit] District center {largest.DistrictName} " +
