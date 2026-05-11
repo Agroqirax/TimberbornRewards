@@ -16,7 +16,9 @@
     "Timberborn.GameDistricts",
     "Timberborn.Goods",
     "Timberborn.SimpleOutputBuildings",
-    "Timberborn.BlueprintSystem"
+    "Timberborn.BlueprintSystem",
+    "Timberborn.GameFactionSystem",
+    "Timberborn.Goods"
   ],
   "autoReferenced": true,
   "defineConstraints": [],

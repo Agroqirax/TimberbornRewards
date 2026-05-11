@@ -7,11 +7,12 @@ namespace Agroqirax.Benefits
     {
         protected override void Configure()
         {
+            Bind<GoodSpecRepository>().AsSingleton();
             Bind<BenefitPool>().AsSingleton();
             Bind<BenefitSelectionPanel>().AsSingleton();
             Bind<CycleBenefitService>().AsSingleton();
-            // DistrictCenterRegistry is already bound by the game — Bindito
-            // resolves it automatically when injecting into BenefitPool.
+            // FactionService and DistrictCenterRegistry are game singletons —
+            // Bindito resolves them automatically via injection.
         }
     }
 }

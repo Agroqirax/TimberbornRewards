@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Timberborn.GameCycleSystem;
+using Timberborn.GameFactionSystem;
 using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using UnityEngine;
@@ -9,45 +10,68 @@ namespace Agroqirax.Benefits
 {
     public class CycleBenefitService : ILoadableSingleton
     {
-        private const int OfferedCount = 3;
-        private const string Tag = "[CycleBenefit]";
+        private const int    OfferedCount = 3;
+        private const string Tag          = "[CycleBenefit]";
 
-        private readonly EventBus _eventBus;
-        private readonly BenefitPool _benefitPool;
+        private readonly EventBus              _eventBus;
+        private readonly BenefitPool           _benefitPool;
         private readonly BenefitSelectionPanel _selectionPanel;
-        private readonly ILoc _loc;
-        private readonly System.Random _random;
+        private readonly ILoc                  _loc;
+        private readonly FactionService        _factionService;
+        private readonly System.Random         _random = new();
 
-        public CycleBenefitService(EventBus eventBus, BenefitPool benefitPool,
-                                   BenefitSelectionPanel selectionPanel, ILoc loc)
+        /// <summary>False if no spec was found for the current faction.</summary>
+        private bool _enabled;
+
+        public CycleBenefitService(
+            EventBus              eventBus,
+            BenefitPool           benefitPool,
+            BenefitSelectionPanel selectionPanel,
+            ILoc                  loc,
+            FactionService        factionService)
         {
             _eventBus       = eventBus;
             _benefitPool    = benefitPool;
             _selectionPanel = selectionPanel;
             _loc            = loc;
-            _random         = new System.Random();
+            _factionService = factionService;
         }
 
         public void Load()
         {
-            _eventBus.Register(this);
-            Debug.Log($"{Tag} Registered with EventBus.");
+            string factionId = _factionService.Current.Id;
+            _enabled = _benefitPool.InitForFaction(factionId);
+
+            if (_enabled)
+            {
+                _eventBus.Register(this);
+                Debug.Log($"{Tag} Enabled for faction '{factionId}'. Registered with EventBus.");
+            }
+            else
+            {
+                Debug.LogWarning($"{Tag} Disabled — no benefit spec for faction '{factionId}'.");
+            }
         }
 
         [OnEvent]
-        public void OnCycleStarted(CycleStartedEvent cycleStartedEvent)
+        public void OnCycleStarted(CycleStartedEvent e)
         {
-            if (cycleStartedEvent.Cycle <= 1)
+            // Cycle 0 is the initial state before the first real cycle ends.
+            if (e.Cycle <= 1)
             {
-                Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} — skipping first cycle.");
+                Debug.Log($"{Tag} Cycle {e.Cycle} — skipping (pre-game).");
                 return;
             }
 
-            Debug.Log($"{Tag} Cycle {cycleStartedEvent.Cycle} started — offering benefits.");
+            Debug.Log($"{Tag} Cycle {e.Cycle} started — offering benefits.");
             List<IBenefit> offered = DrawBenefits(OfferedCount);
-            LogOfferedBenefits(cycleStartedEvent.Cycle, offered);
+            LogOffered(e.Cycle, offered);
             _selectionPanel.ShowFor(offered, OnBenefitChosen);
         }
+
+        // ---------------------------------------------------------------
+        // Private helpers
+        // ---------------------------------------------------------------
 
         private void OnBenefitChosen(IBenefit benefit)
         {
@@ -56,6 +80,10 @@ namespace Agroqirax.Benefits
             Debug.Log($"{Tag} Done.");
         }
 
+        /// <summary>
+        /// Draws <paramref name="count"/> distinct benefits from the weighted
+        /// pool using a partial Fisher-Yates shuffle.
+        /// </summary>
         private List<IBenefit> DrawBenefits(int count)
         {
             IReadOnlyList<IBenefit> pool = _benefitPool.All;
@@ -67,14 +95,14 @@ namespace Agroqirax.Benefits
             var result = new List<IBenefit>(drawCount);
             for (int i = 0; i < drawCount; i++)
             {
-                int j = i + _random.Next(pool.Count - i);
+                int j = _random.Next(i, pool.Count);
                 (indices[i], indices[j]) = (indices[j], indices[i]);
                 result.Add(pool[indices[i]]);
             }
             return result;
         }
 
-        private void LogOfferedBenefits(int cycle, List<IBenefit> offered)
+        private void LogOffered(int cycle, List<IBenefit> offered)
         {
             Debug.Log($"{Tag} === Cycle {cycle} — Choose a benefit ===");
             for (int i = 0; i < offered.Count; i++)
