@@ -3,7 +3,9 @@
     "**/*.meta": true
   },
   "files.associations": {
-    "**/*.asmdef": "json"
+    "**/*.asmdef": "json",
+    "**/*.uxml": "xml",
+    "**/*.uss": "css"
   },
   "json.schemas": [
     {
