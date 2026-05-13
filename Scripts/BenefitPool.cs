@@ -8,9 +8,11 @@ using UnityEngine;
 namespace Agroqirax.Benefits
 {
     /// <summary>
-    /// Builds the weighted pool of <see cref="IBenefit"/> instances for the current faction.
-    /// Each entry with Weight N is added N times so that random sampling via a simple
-    /// index pick produces the correct distribution.
+    /// Builds and holds the list of unique weighted benefits for the current faction.
+    /// Each entry pairs an <see cref="IBenefit"/> with its configured weight; the
+    /// draw algorithm in <see cref="CycleBenefitService"/> uses weights directly
+    /// rather than expanding them into repeated pool entries, which guarantees that
+    /// the same benefit is never offered twice in one draw.
     /// </summary>
     public class BenefitPool
     {
@@ -19,7 +21,7 @@ namespace Agroqirax.Benefits
         private readonly DistrictCenterRegistry  _districtCenterRegistry;
         private readonly GoodSpecRepository      _goodSpecRepository;
 
-        private List<IBenefit>? _pool;
+        private List<(IBenefit Benefit, int Weight)>? _pool;
 
         public BenefitPool(
             ISpecService           specService,
@@ -33,8 +35,11 @@ namespace Agroqirax.Benefits
             _goodSpecRepository     = goodSpecRepository;
         }
 
-        /// <summary>The built pool. Empty until <see cref="InitForFaction"/> is called.</summary>
-        public IReadOnlyList<IBenefit> All => _pool ??= new List<IBenefit>();
+        /// <summary>
+        /// Unique weighted benefit entries. Empty until <see cref="InitForFaction"/> is called.
+        /// </summary>
+        public IReadOnlyList<(IBenefit Benefit, int Weight)> UniqueWeighted =>
+            _pool ??= new List<(IBenefit, int)>();
 
         /// <summary>
         /// Builds the pool for the given faction ID.
@@ -46,7 +51,7 @@ namespace Agroqirax.Benefits
             return _pool.Count > 0;
         }
 
-        private List<IBenefit> BuildPool(string factionId)
+        private List<(IBenefit, int)> BuildPool(string factionId)
         {
             FactionBenefitSpec? spec = FindSpec(factionId);
             if (spec == null)
@@ -54,22 +59,20 @@ namespace Agroqirax.Benefits
                 Debug.LogWarning(
                     $"[CycleBenefit] No FactionBenefitSpec found for faction '{factionId}'. " +
                     $"Create Configurations/Benefits.{factionId}.blueprint.json to add support.");
-                return new List<IBenefit>();
+                return new List<(IBenefit, int)>();
             }
 
-            var pool = new List<IBenefit>();
+            var pool = new List<(IBenefit, int)>();
             foreach (BenefitEntrySpec entry in spec.Benefits)
             {
                 IBenefit? benefit = CreateBenefit(entry);
                 if (benefit == null)
                     continue;
 
-                int weight = entry.Weight > 0 ? entry.Weight : 1;
-                for (int i = 0; i < weight; i++)
-                    pool.Add(benefit);
+                pool.Add((benefit, entry.Weight > 0 ? entry.Weight : 1));
             }
 
-            Debug.Log($"[CycleBenefit] Loaded {pool.Count} weighted pool entries for faction '{factionId}'.");
+            Debug.Log($"[CycleBenefit] Loaded {pool.Count} unique benefits for faction '{factionId}'.");
             return pool;
         }
 
@@ -106,7 +109,8 @@ namespace Agroqirax.Benefits
                 }
 
                 default:
-                    Debug.LogWarning($"[CycleBenefit] Unknown benefit type '{entry.Type}' — skipping entry.");
+                    Debug.LogWarning(
+                        $"[CycleBenefit] Unknown benefit type '{entry.Type}' — skipping entry.");
                     return null;
             }
         }

@@ -71,25 +71,47 @@ namespace Agroqirax.Benefits
         }
 
         /// <summary>
-        /// Draws <paramref name="count"/> distinct benefits from the weighted pool
-        /// using a partial Fisher-Yates shuffle on an index list.
+        /// Draws <paramref name="count"/> distinct benefits using weighted random
+        /// sampling without replacement.
+        ///
+        /// Each call does a weighted pick from the remaining candidates, removes
+        /// the winner, then repeats — so the same benefit can never appear twice
+        /// regardless of its weight relative to others.
         /// </summary>
         private List<IBenefit> DrawBenefits(int count)
         {
-            IReadOnlyList<IBenefit> pool      = _benefitPool.All;
-            int                     drawCount = Math.Min(count, pool.Count);
+            // Copy the unique weighted entries so we can remove winners without
+            // mutating the pool itself.
+            List<(IBenefit Benefit, int Weight)> candidates =
+                new List<(IBenefit, int)>(_benefitPool.UniqueWeighted);
 
-            var indices = new List<int>(pool.Count);
-            for (int i = 0; i < pool.Count; i++)
-                indices.Add(i);
+            int drawCount = Math.Min(count, candidates.Count);
+            var result    = new List<IBenefit>(drawCount);
 
-            var result = new List<IBenefit>(drawCount);
             for (int i = 0; i < drawCount; i++)
             {
-                int j = _random.Next(i, pool.Count);
-                (indices[i], indices[j]) = (indices[j], indices[i]);
-                result.Add(pool[indices[i]]);
+                int totalWeight = 0;
+                foreach (var (_, w) in candidates)
+                    totalWeight += w;
+
+                int roll    = _random.Next(totalWeight);
+                int running = 0;
+                int chosen  = candidates.Count - 1; // fallback to last
+
+                for (int j = 0; j < candidates.Count; j++)
+                {
+                    running += candidates[j].Weight;
+                    if (roll < running)
+                    {
+                        chosen = j;
+                        break;
+                    }
+                }
+
+                result.Add(candidates[chosen].Benefit);
+                candidates.RemoveAt(chosen);
             }
+
             return result;
         }
     }
