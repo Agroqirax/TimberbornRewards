@@ -1,4 +1,4 @@
 ID,Text,Comment
 CycleBenefit.ChooseTitle,Choose a Cycle Benefit,Title shown at the top of the benefit selection panel
-CycleBenefit.SciencePoints,+{0} Science Points,{0} is the amount e.g. "+150 Science Points"
-CycleBenefit.Resource,+{0} {1},{0} = amount; {1} = good ID e.g. "+30 Log"
+CycleBenefit.SciencePoints,+{0} Science Points,"{0} is the amount, e.g. ""+150 Science Points"""
+CycleBenefit.Resource,+{0} {1},"{0} = amount; {1} = localized good name, e.g. ""+30 Logs"""

@@ -6,9 +6,8 @@ using UnityEngine;
 namespace Agroqirax.Benefits
 {
     /// <summary>
-    /// Builds a goodId → GoodSpec lookup from every GoodSpec loaded by the
-    /// game (vanilla + mods).  Inject this wherever you need a good's
-    /// localization key or icon path.
+    /// Lazy lookup from good ID to <see cref="GoodSpec"/>.
+    /// Indexed once on first access; covers vanilla goods and any mod-added goods.
     /// </summary>
     public class GoodSpecRepository
     {
@@ -20,14 +19,11 @@ namespace Agroqirax.Benefits
             _specService = specService;
         }
 
-        /// <summary>
-        /// Returns the GoodSpec for the given ID, or null if not found.
-        /// The index is built lazily on first access.
-        /// </summary>
+        /// <summary>Returns the GoodSpec for <paramref name="goodId"/>, or null if not found.</summary>
         public GoodSpec? Get(string goodId)
         {
             _index ??= BuildIndex();
-            return _index.TryGetValue(goodId, out var spec) ? spec : null;
+            return _index.TryGetValue(goodId, out GoodSpec? spec) ? spec : null;
         }
 
         private Dictionary<string, GoodSpec> BuildIndex()
@@ -36,14 +32,10 @@ namespace Agroqirax.Benefits
             foreach (GoodSpec spec in _specService.GetSpecs<GoodSpec>())
             {
                 if (string.IsNullOrEmpty(spec.Id))
-                {
-                    Debug.LogWarning("[CycleBenefit] Skipping GoodSpec with empty Id.");
                     continue;
-                }
                 if (!index.TryAdd(spec.Id, spec))
                     Debug.LogWarning($"[CycleBenefit] Duplicate GoodSpec Id '{spec.Id}' — keeping first.");
             }
-            Debug.Log($"[CycleBenefit] GoodSpecRepository indexed {index.Count} goods.");
             return index;
         }
     }

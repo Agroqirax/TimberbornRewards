@@ -5,20 +5,17 @@ using UnityEngine.UIElements;
 namespace Agroqirax.Benefits
 {
     /// <summary>
-    /// A Button that renders its background via NineSliceBackground, exactly
-    /// like the game's own internal NineSliceButton / LocalizableButton.
-    /// This lets us use "menu-button" and other USS classes that rely on
-    /// --background-image and --background-slice-* custom properties.
+    /// Mirrors the game's internal <c>NineSliceButton</c>, which is inaccessible
+    /// to mod code. Needed because <c>LocalizableButton</c> (the public alternative)
+    /// requires a <c>text-loc-key</c> attribute and cannot be used for dynamically
+    /// labelled buttons. Behaviour is identical to the game's version.
     /// </summary>
-    public class MenuButton : Button
+    internal class NineSliceButton : Button
     {
         private readonly NineSliceBackground _nineSliceBackground = new NineSliceBackground();
 
-        public MenuButton()
+        public NineSliceButton()
         {
-            // Replicate the constructor ordering from NineSliceButton exactly:
-            // move the default generateVisualContent delegates to the end so
-            // NineSlice draws first (underneath the label text).
             Delegate[] existing = generateVisualContent.GetInvocationList();
             generateVisualContent = (Action<MeshGenerationContext>)Delegate.Combine(
                 generateVisualContent,

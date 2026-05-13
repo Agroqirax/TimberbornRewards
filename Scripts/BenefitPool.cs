@@ -8,10 +8,9 @@ using UnityEngine;
 namespace Agroqirax.Benefits
 {
     /// <summary>
-    /// Builds the weighted pool of <see cref="IBenefit"/> instances for the
-    /// current faction.  Returns an empty pool (and logs a warning) if no
-    /// <see cref="FactionBenefitSpec"/> exists for the active faction — the
-    /// service layer treats an empty pool as "mod disabled this session".
+    /// Builds the weighted pool of <see cref="IBenefit"/> instances for the current faction.
+    /// Each entry with Weight N is added N times so that random sampling via a simple
+    /// index pick produces the correct distribution.
     /// </summary>
     public class BenefitPool
     {
@@ -34,13 +33,11 @@ namespace Agroqirax.Benefits
             _goodSpecRepository     = goodSpecRepository;
         }
 
-        /// <summary>
-        /// The built pool. Empty until <see cref="InitForFaction"/> is called.
-        /// </summary>
+        /// <summary>The built pool. Empty until <see cref="InitForFaction"/> is called.</summary>
         public IReadOnlyList<IBenefit> All => _pool ??= new List<IBenefit>();
 
         /// <summary>
-        /// Builds (or rebuilds) the pool for the given faction ID.
+        /// Builds the pool for the given faction ID.
         /// Returns <c>true</c> if at least one benefit was loaded.
         /// </summary>
         public bool InitForFaction(string factionId)
@@ -56,8 +53,7 @@ namespace Agroqirax.Benefits
             {
                 Debug.LogWarning(
                     $"[CycleBenefit] No FactionBenefitSpec found for faction '{factionId}'. " +
-                    "Cycle benefits are disabled for this session. " +
-                    $"To add support, create a Benefits.{factionId}.blueprint.json in Configurations/.");
+                    $"Create Configurations/Benefits.{factionId}.blueprint.json to add support.");
                 return new List<IBenefit>();
             }
 
@@ -65,22 +61,23 @@ namespace Agroqirax.Benefits
             foreach (BenefitEntrySpec entry in spec.Benefits)
             {
                 IBenefit? benefit = CreateBenefit(entry);
-                if (benefit == null) continue;
+                if (benefit == null)
+                    continue;
 
                 int weight = entry.Weight > 0 ? entry.Weight : 1;
                 for (int i = 0; i < weight; i++)
                     pool.Add(benefit);
             }
 
-            Debug.Log($"[CycleBenefit] Loaded {pool.Count} weighted benefit entries for faction '{factionId}'.");
+            Debug.Log($"[CycleBenefit] Loaded {pool.Count} weighted pool entries for faction '{factionId}'.");
             return pool;
         }
 
         private FactionBenefitSpec? FindSpec(string factionId)
         {
-            foreach (FactionBenefitSpec s in _specService.GetSpecs<FactionBenefitSpec>())
-                if (s.FactionId == factionId)
-                    return s;
+            foreach (FactionBenefitSpec spec in _specService.GetSpecs<FactionBenefitSpec>())
+                if (spec.FactionId == factionId)
+                    return spec;
             return null;
         }
 
@@ -92,22 +89,24 @@ namespace Agroqirax.Benefits
                     return new SciencePointBenefit(_scienceService, entry.Amount);
 
                 case "Resource":
+                {
                     GoodSpec? goodSpec = _goodSpecRepository.Get(entry.GoodId);
                     if (goodSpec == null)
                     {
                         Debug.LogWarning(
-                            $"[CycleBenefit] GoodSpec not found for '{entry.GoodId}' — skipping benefit.");
+                            $"[CycleBenefit] Unknown GoodId '{entry.GoodId}' — skipping entry.");
                         return null;
                     }
                     return new ResourceBenefit(
                         _districtCenterRegistry,
-                        entry.GoodId,
-                        entry.Amount,
+                        goodId:      entry.GoodId,
+                        amount:      entry.Amount,
                         displayName: goodSpec.DisplayName.Value,
                         iconPath:    goodSpec.Icon.Path);
+                }
 
                 default:
-                    Debug.LogWarning($"[CycleBenefit] Unknown benefit type '{entry.Type}' — skipping.");
+                    Debug.LogWarning($"[CycleBenefit] Unknown benefit type '{entry.Type}' — skipping entry.");
                     return null;
             }
         }

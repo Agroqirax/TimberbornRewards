@@ -5,18 +5,18 @@ namespace Agroqirax.Benefits
 {
     public class SciencePointBenefit : IBenefit
     {
-        private static readonly string LocKey = "CycleBenefit.SciencePoints";
-        public static readonly string SharedIconPath = "sprites/topbar/Science";
+        private static readonly string LocKey   = "CycleBenefit.SciencePoints";
+        private static readonly string IconPath_ = "sprites/topbar/Science";
 
         private readonly ScienceService _scienceService;
-        private readonly int _amount;
+        private readonly int            _amount;
 
-        public string? IconPath => SharedIconPath;
+        public string? IconPath => IconPath_;
 
         public SciencePointBenefit(ScienceService scienceService, int amount)
         {
             _scienceService = scienceService;
-            _amount = amount;
+            _amount         = amount;
         }
 
         public string GetDisplayName(ILoc loc) => loc.T(LocKey, _amount);

@@ -8,30 +8,57 @@ using UnityEngine.UIElements;
 
 namespace Agroqirax.Benefits
 {
+    /// <summary>
+    /// Displays the benefit selection dialog at cycle start.
+    /// Follows the same pattern as <c>GameOptionsBox</c>: UXML is loaded fresh
+    /// each cycle via <see cref="VisualElementLoader"/>, buttons are built in
+    /// code and added to the container, then the panel is pushed onto the stack.
+    ///
+    /// We build buttons in code (using our local <see cref="NineSliceButton"/>)
+    /// rather than declaring them in UXML because <c>cui:LocalizableButton</c>
+    /// — the only public nine-slice button type — requires a <c>text-loc-key</c>
+    /// attribute and throws during UXML initialisation without one.
+    /// </summary>
     public class BenefitSelectionPanel : IPanelController
     {
-        private static readonly string CoreStylePath   = "UI/Views/Core/CoreStyle";
-        private static readonly string CommonStylePath = "UI/Views/Common/CommonMiscStyle";
-        private static readonly string TitleLocKey     = "CycleBenefit.ChooseTitle";
+        private static readonly CustomStyleProperty<Color> IconTintProperty =
+            new CustomStyleProperty<Color>("--icon-tint");
 
-        private readonly PanelStack _panelStack;
-        private readonly IAssetLoader _assetLoader;
-        private readonly ILoc _loc;
+        private static readonly string ViewPath    = "BenefitSelectionBox";
+        private static readonly string TitleLocKey = "CycleBenefit.ChooseTitle";
 
-        private List<IBenefit> _offered = new();
+        private readonly VisualElementLoader _visualElementLoader;
+        private readonly IAssetLoader        _assetLoader;
+        private readonly PanelStack          _panelStack;
+        private readonly ILoc                _loc;
+
+        private VisualElement?    _root;
         private Action<IBenefit>? _onChosen;
 
-        public BenefitSelectionPanel(PanelStack panelStack, IAssetLoader assetLoader, ILoc loc)
+        public BenefitSelectionPanel(
+            VisualElementLoader visualElementLoader,
+            IAssetLoader        assetLoader,
+            PanelStack          panelStack,
+            ILoc                loc)
         {
-            _panelStack  = panelStack;
-            _assetLoader = assetLoader;
-            _loc         = loc;
+            _visualElementLoader = visualElementLoader;
+            _assetLoader         = assetLoader;
+            _panelStack          = panelStack;
+            _loc                 = loc;
         }
 
+        /// <summary>Populates the panel with the offered benefits and pushes it onto the stack.</summary>
         public void ShowFor(List<IBenefit> offered, Action<IBenefit> onChosen)
         {
-            _offered  = offered;
             _onChosen = onChosen;
+
+            _root = _visualElementLoader.LoadVisualElement(ViewPath);
+            _root.Q<Label>("Title").text = _loc.T(TitleLocKey);
+
+            VisualElement container = _root.Q<VisualElement>("BenefitButtons");
+            foreach (IBenefit benefit in offered)
+                container.Add(BuildButton(benefit));
+
             _panelStack.PushDialog(this);
         }
 
@@ -39,108 +66,54 @@ namespace Agroqirax.Benefits
         // IPanelController
         // ---------------------------------------------------------------
 
-        public VisualElement GetPanel() => BuildPanel();
+        public VisualElement GetPanel() => _root!;
 
-        public bool OnUIConfirmed()
-        {
-            if (_offered.Count > 0) Choose(_offered[0]);
-            return true;
-        }
+        public bool OnUIConfirmed() => false;  // no default — player must click
 
-        public void OnUICancelled() { }
+        public void OnUICancelled() { }        // intentionally non-cancellable
 
         // ---------------------------------------------------------------
-        // Panel construction
+        // Private helpers
         // ---------------------------------------------------------------
 
-        private VisualElement BuildPanel()
+        private VisualElement BuildButton(IBenefit benefit)
         {
-            var coreStyle   = _assetLoader.Load<StyleSheet>(CoreStylePath);
-            var commonStyle = _assetLoader.Load<StyleSheet>(CommonStylePath);
-
-            var wrapper = new VisualElement();
-            wrapper.styleSheets.Add(coreStyle);
-            wrapper.styleSheets.Add(commonStyle);
-            wrapper.style.flexGrow       = 1;
-            wrapper.style.alignItems     = Align.Center;
-            wrapper.style.justifyContent = Justify.Center;
-
-            var box = new NineSliceVisualElement();
-            box.AddToClassList("options-box");
-            box.AddToClassList("sliced-border");
-            wrapper.Add(box);
-
-            var title = new Label(_loc.T(TitleLocKey));
-            title.style.color                   = Color.white;
-            title.style.fontSize                = 18;
-            title.style.unityFontStyleAndWeight = FontStyle.Bold;
-            title.style.marginBottom            = 12;
-            title.style.alignSelf               = Align.Center;
-            box.Add(title);
-
-            foreach (var benefit in _offered)
-                box.Add(BuildBenefitButton(benefit));
-
-            return wrapper;
-        }
-
-        private VisualElement BuildBenefitButton(IBenefit benefit)
-        {
-            // Outer container styled as the menu button — handles background,
-            // hover state, sizing, and click. We don't use Button.text so we
-            // have full control over the interior layout.
-            var button = new MenuButton();
+            var button = new NineSliceButton();
             button.AddToClassList("menu-button");
             button.AddToClassList("menu-button--stretched");
+            button.AddToClassList("benefit-button");
             button.RegisterCallback<ClickEvent>(_ => Choose(benefit));
 
-            // Interior row: icon on the left, label centred in remaining space.
-            // Using an explicit row container inside the button gives us clean
-            // flex control without fighting the button's own text element.
             var row = new VisualElement();
-            row.style.flexDirection  = FlexDirection.Row;
-            row.style.alignItems     = Align.Center;
-            row.style.flexGrow       = 1;
-            // Match the button's own padding so the row fills it edge-to-edge.
-            row.style.paddingLeft    = 20;
-            row.style.paddingRight   = 20;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems    = Align.Center;
+            row.style.flexGrow      = 1;
             button.Add(row);
 
-            // Icon
             if (benefit.IconPath != null)
             {
-                var sprite = _assetLoader.LoadSafe<Sprite>(benefit.IconPath);
+                Sprite? sprite = _assetLoader.Load<Sprite>(benefit.IconPath);
                 if (sprite != null)
                 {
                     var icon = new Image();
-                    icon.sprite              = sprite;
-                    icon.scaleMode           = ScaleMode.ScaleToFit;
-                    icon.style.width         = 24;
-                    icon.style.height        = 24;
-                    icon.style.flexShrink    = 0;
-                    icon.style.marginRight   = 10;
-                    icon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
-                    // Mirror the CSS hover colour change on the icon tint.
-                    button.RegisterCallback<MouseEnterEvent>(_ =>
-                        icon.style.unityBackgroundImageTintColor = new StyleColor(Color.black));
-                    button.RegisterCallback<MouseLeaveEvent>(_ =>
-                        icon.style.unityBackgroundImageTintColor = new StyleColor(Color.white));
+                    icon.sprite    = sprite;
+                    icon.scaleMode = ScaleMode.ScaleToFit;
+                    icon.AddToClassList("benefit-button__icon");
+
+                    // Read --icon-tint from USS so hover colour is driven declaratively
+                    // rather than via MouseEnter/Leave callbacks.
+                    icon.RegisterCallback<CustomStyleResolvedEvent>(_ =>
+                    {
+                        if (icon.customStyle.TryGetValue(IconTintProperty, out Color tint))
+                            icon.style.unityBackgroundImageTintColor = new StyleColor(tint);
+                    });
+
                     row.Add(icon);
                 }
             }
 
-            // Label — centred in the remaining space, bold white matching menu-button style.
-            // Color is set explicitly because child elements don't inherit color in UIToolkit.
             var label = new Label(benefit.GetDisplayName(_loc));
-            label.style.flexGrow                = 1;
-            label.style.unityTextAlign          = TextAnchor.MiddleCenter;
-            label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            label.style.fontSize                = 14;
-            label.style.color                   = new StyleColor(Color.white);
-            button.RegisterCallback<MouseEnterEvent>(_ =>
-                label.style.color = new StyleColor(Color.black));
-            button.RegisterCallback<MouseLeaveEvent>(_ =>
-                label.style.color = new StyleColor(Color.white));
+            label.AddToClassList("benefit-button__label");
             row.Add(label);
 
             return button;
@@ -148,7 +121,6 @@ namespace Agroqirax.Benefits
 
         private void Choose(IBenefit benefit)
         {
-            Debug.Log($"[CycleBenefit] Player chose: {benefit.GetDisplayName(_loc)}");
             _panelStack.Pop(this);
             _onChosen?.Invoke(benefit);
         }

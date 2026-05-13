@@ -1,0 +1,49 @@
+/*
+ * Styles for the Cycle Benefit selection panel.
+ * The heavy lifting (menu-button appearance, options-box, sliced-border, grow-centered)
+ * is handled by the game's own CoreStyle / CommonStyle / CommonMiscStyle.
+ */
+
+.benefit-selection__title {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    -unity-font-style: bold;
+    align-self: center;
+    margin-bottom: 12px;
+}
+
+/*
+ * Icon tint custom property.
+ * USS color does not cascade to child Image elements in UIToolkit, so the
+ * Image reads --icon-tint via CustomStyleResolvedEvent in code instead.
+ */
+.benefit-button {
+    --icon-tint: rgb(255, 255, 255);
+}
+
+.benefit-button:hover:enabled {
+    --icon-tint: rgb(0, 0, 0);
+}
+
+.benefit-button__icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/*
+ * The built-in menu-button USS sets color on the button itself, but that
+ * does not cascade to child Label elements in UIToolkit. We override here.
+ */
+.benefit-button__label {
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+}
+
+.benefit-button:hover:enabled .benefit-button__label {
+    color: rgb(0, 0, 0);
+}
