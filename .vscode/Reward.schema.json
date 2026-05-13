@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "FactionRewardSpec": {
+      "type": "object",
+      "properties": {
+        "FactionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Rewards": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "required": ["Type", "Amount", "Weight"],
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "string",
+                "minLength": 1,
+                "enum": ["Science", "Resource"]
+              },
+              "GoodId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "Amount": {
+                "type": "number"
+              },
+              "Weight": {
+                "type": "number"
+              },
+              "WeightCurve": {
+                "type": "object",
+                "properties": {
+                  "Keyframes": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "items": {
+                      "required": ["Cycle", "Multiplier"],
+                      "properties": {
+                        "Cycle": {
+                          "type": "number"
+                        },
+                        "Multiplier": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["Keyframes"]
+              }
+            }
+          }
+        }
+      },
+      "required": ["FactionId", "Rewards"]
+    }
+  },
+  "required": ["FactionRewardSpec"]
+}

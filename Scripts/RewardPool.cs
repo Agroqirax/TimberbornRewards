@@ -8,11 +8,12 @@ using UnityEngine;
 namespace Agroqirax.Rewards
 {
     /// <summary>
-    /// Builds and holds the list of unique weighted rewards for the current faction.
-    /// Each entry pairs an <see cref="IReward"/> with its configured weight; the
-    /// draw algorithm in <see cref="CycleRewardService"/> uses weights directly
-    /// rather than expanding them into repeated pool entries, which guarantees that
-    /// the same reward is never offered twice in one draw.
+    /// Builds and holds the list of rewards for the current faction.
+    ///
+    /// Weights are NOT baked at load time; call
+    /// <see cref="GetWeightedForCycle"/> each draw so that
+    /// <see cref="RewardEntrySpec.WeightCurve"/> can vary the effective weight
+    /// (and eligibility) per cycle.
     /// </summary>
     public class RewardPool
     {
@@ -21,7 +22,14 @@ namespace Agroqirax.Rewards
         private readonly DistrictCenterRegistry  _districtCenterRegistry;
         private readonly GoodSpecRepository      _goodSpecRepository;
 
-        private List<(IReward Reward, int Weight)>? _pool;
+        /// <summary>
+        /// Pairs of (reward, entry-spec) loaded for the current faction.
+        /// The entry-spec is kept so <see cref="GetWeightedForCycle"/> can
+        /// evaluate the curve without re-parsing.
+        /// Empty until <see cref="InitForFaction"/> is called.
+        /// </summary>
+        private List<(IReward Reward, RewardEntrySpec Entry)> _entries
+            = new List<(IReward, RewardEntrySpec)>();
 
         public RewardPool(
             ISpecService           specService,
@@ -36,22 +44,36 @@ namespace Agroqirax.Rewards
         }
 
         /// <summary>
-        /// Unique weighted reward entries. Empty until <see cref="InitForFaction"/> is called.
-        /// </summary>
-        public IReadOnlyList<(IReward Reward, int Weight)> UniqueWeighted =>
-            _pool ??= new List<(IReward, int)>();
-
-        /// <summary>
         /// Builds the pool for the given faction ID.
         /// Returns <c>true</c> if at least one reward was loaded.
         /// </summary>
         public bool InitForFaction(string factionId)
         {
-            _pool = BuildPool(factionId);
-            return _pool.Count > 0;
+            _entries = BuildEntries(factionId);
+            return _entries.Count > 0;
         }
 
-        private List<(IReward, int)> BuildPool(string factionId)
+        /// <summary>
+        /// Returns (reward, weight) pairs eligible for the given cycle.
+        /// Entries whose effective weight evaluates to &lt;= 0 are excluded entirely.
+        /// </summary>
+        public List<(IReward Reward, float Weight)> GetWeightedForCycle(int cycle)
+        {
+            var result = new List<(IReward, float)>(_entries.Count);
+            foreach (var (reward, entry) in _entries)
+            {
+                float w = entry.GetWeightAt(cycle);
+                if (w > 0f)
+                    result.Add((reward, w));
+            }
+            return result;
+        }
+
+        // ---------------------------------------------------------------
+        // Private helpers
+        // ---------------------------------------------------------------
+
+        private List<(IReward, RewardEntrySpec)> BuildEntries(string factionId)
         {
             FactionRewardSpec? spec = FindSpec(factionId);
             if (spec == null)
@@ -59,21 +81,19 @@ namespace Agroqirax.Rewards
                 Debug.LogWarning(
                     $"[CycleReward] No FactionRewardSpec found for faction '{factionId}'. " +
                     $"Create Configurations/Rewards.{factionId}.blueprint.json to add support.");
-                return new List<(IReward, int)>();
+                return new List<(IReward, RewardEntrySpec)>();
             }
 
-            var pool = new List<(IReward, int)>();
+            var entries = new List<(IReward, RewardEntrySpec)>();
             foreach (RewardEntrySpec entry in spec.Rewards)
             {
                 IReward? reward = CreateReward(entry);
-                if (reward == null)
-                    continue;
-
-                pool.Add((reward, entry.Weight > 0 ? entry.Weight : 1));
+                if (reward != null)
+                    entries.Add((reward, entry));
             }
 
-            Debug.Log($"[CycleReward] Loaded {pool.Count} unique rewards for faction '{factionId}'.");
-            return pool;
+            Debug.Log($"[CycleReward] Loaded {entries.Count} rewards for faction '{factionId}'.");
+            return entries;
         }
 
         private FactionRewardSpec? FindSpec(string factionId)

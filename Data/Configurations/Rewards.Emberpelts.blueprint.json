@@ -2,20 +2,72 @@
   "FactionRewardSpec": {
     "FactionId": "Emberpelts",
     "Rewards": [
-      { "Type": "Science", "Amount": 100, "Weight": 2 },
-      { "Type": "Science", "Amount": 300, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Log", "Amount": 25, "Weight": 2 },
+      {
+        "Type": "Science",
+        "Amount": 100,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 20, "Multiplier": 0.5 },
+            { "Cycle": 40, "Multiplier": 0.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 300,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.0 },
+            { "Cycle": 10, "Multiplier": 0.0 },
+            { "Cycle": 20, "Multiplier": 1.0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Log",
+        "Amount": 25,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 15, "Multiplier": 0.0 }
+          ]
+        }
+      },
       { "Type": "Resource", "GoodId": "Coal", "Amount": 20, "Weight": 3 },
       { "Type": "Resource", "GoodId": "MetalBlock", "Amount": 10, "Weight": 2 },
       { "Type": "Resource", "GoodId": "Gear", "Amount": 15, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Paper", "Amount": 15, "Weight": 1 },
+      { "Type": "Resource", "GoodId": "Apple", "Amount": 15, "Weight": 1 },
       { "Type": "Resource", "GoodId": "Fuel", "Amount": 20, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Explosives", "Amount": 4, "Weight": 1 },
+      {
+        "Type": "Resource",
+        "GoodId": "Explosives",
+        "Amount": 4,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.0 },
+            { "Cycle": 15, "Multiplier": 0.0 },
+            { "Cycle": 25, "Multiplier": 1.0 }
+          ]
+        }
+      },
       {
         "Type": "Resource",
         "GoodId": "PhoenixEssence",
         "Amount": 6,
-        "Weight": 1
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.0 },
+            { "Cycle": 25, "Multiplier": 0.0 },
+            { "Cycle": 40, "Multiplier": 1.0 }
+          ]
+        }
       }
     ]
   }

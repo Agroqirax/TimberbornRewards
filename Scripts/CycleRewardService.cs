@@ -60,7 +60,7 @@ namespace Agroqirax.Rewards
                 return;
 
             Debug.Log($"{Tag} Cycle {e.Cycle} — offering rewards.");
-            List<IReward> offered = DrawRewards(OfferedCount);
+            List<IReward> offered = DrawRewards(OfferedCount, e.Cycle);
             _selectionPanel.ShowFor(offered, OnRewardChosen);
         }
 
@@ -74,29 +74,33 @@ namespace Agroqirax.Rewards
         /// Draws <paramref name="count"/> distinct rewards using weighted random
         /// sampling without replacement.
         ///
-        /// Each call does a weighted pick from the remaining candidates, removes
+        /// Candidates are first filtered to those eligible at <paramref name="cycle"/>
+        /// (i.e. effective weight > 0 after curve evaluation), so entries can be
+        /// completely locked out at certain cycle ranges via their
+        /// <see cref="RewardEntrySpec.WeightCurve"/>.
+        ///
+        /// Each iteration does a weighted pick from the remaining candidates, removes
         /// the winner, then repeats — so the same reward can never appear twice
         /// regardless of its weight relative to others.
         /// </summary>
-        private List<IReward> DrawRewards(int count)
+        private List<IReward> DrawRewards(int count, int cycle)
         {
-            // Copy the unique weighted entries so we can remove winners without
-            // mutating the pool itself.
-            List<(IReward Reward, int Weight)> candidates =
-                new List<(IReward, int)>(_rewardPool.UniqueWeighted);
+            // Evaluate curves for this cycle and exclude zero-weight entries.
+            List<(IReward Reward, float Weight)> candidates =
+                _rewardPool.GetWeightedForCycle(cycle);
 
             int drawCount = Math.Min(count, candidates.Count);
             var result    = new List<IReward>(drawCount);
 
             for (int i = 0; i < drawCount; i++)
             {
-                int totalWeight = 0;
+                double totalWeight = 0d;
                 foreach (var (_, w) in candidates)
                     totalWeight += w;
 
-                int roll    = _random.Next(totalWeight);
-                int running = 0;
-                int chosen  = candidates.Count - 1; // fallback to last
+                double roll    = _random.NextDouble() * totalWeight;
+                double running = 0d;
+                int    chosen  = candidates.Count - 1; // fallback to last
 
                 for (int j = 0; j < candidates.Count; j++)
                 {

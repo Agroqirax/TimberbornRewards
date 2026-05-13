@@ -44,6 +44,6 @@
   color: rgb(255, 255, 255);
 }
 
-reward-button:hover:enabled .reward-button__label {
+.reward-button:hover:enabled .reward-button__label {
   color: rgb(0, 0, 0);
 }
