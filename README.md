@@ -10,6 +10,6 @@ Goods will be delivered to the district center with the largest population.
 
 ## Download
 
-- [Steam workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3725103123): Click op abonneren
-- [Mod.io](https://mod.io/g/timberborn/m/cycle-rewards): Download het zip bestand en pak uit naar `~/Documents/Timberborn/Mods/Rewards`.
-- [Github](https://github.com/agroqirax/TimberbornCycleRewards/releases/latest): Download het zip bestand en pak uit naar `~/Documents/Timberborn/Mods/Rewards`.
+- [Steam workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3725103123): Click subscribe
+- [Mod.io](https://mod.io/g/timberborn/m/cycle-rewards): Download the zip file and extract to `~/Documents/Timberborn/Mods/Rewards`.
+- [Github](https://github.com/agroqirax/TimberbornCycleRewards/releases/latest): Download the zip file and extract to `~/Documents/Timberborn/Mods/Rewards`.
