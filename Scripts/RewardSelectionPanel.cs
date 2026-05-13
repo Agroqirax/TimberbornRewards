@@ -6,10 +6,10 @@ using Timberborn.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
     /// <summary>
-    /// Displays the benefit selection dialog at cycle start.
+    /// Displays the reward selection dialog at cycle start.
     /// Follows the same pattern as <c>GameOptionsBox</c>: UXML is loaded fresh
     /// each cycle via <see cref="VisualElementLoader"/>, buttons are built in
     /// code and added to the container, then the panel is pushed onto the stack.
@@ -19,13 +19,13 @@ namespace Agroqirax.Benefits
     /// — the only public nine-slice button type — requires a <c>text-loc-key</c>
     /// attribute and throws during UXML initialisation without one.
     /// </summary>
-    public class BenefitSelectionPanel : IPanelController
+    public class RewardSelectionPanel : IPanelController
     {
         private static readonly CustomStyleProperty<Color> IconTintProperty =
             new CustomStyleProperty<Color>("--icon-tint");
 
-        private static readonly string ViewPath    = "BenefitSelectionBox";
-        private static readonly string TitleLocKey = "CycleBenefit.ChooseTitle";
+        private static readonly string ViewPath    = "RewardSelectionBox";
+        private static readonly string TitleLocKey = "CycleReward.ChooseTitle";
 
         private readonly VisualElementLoader _visualElementLoader;
         private readonly IAssetLoader        _assetLoader;
@@ -33,9 +33,9 @@ namespace Agroqirax.Benefits
         private readonly ILoc                _loc;
 
         private VisualElement?    _root;
-        private Action<IBenefit>? _onChosen;
+        private Action<IReward>? _onChosen;
 
-        public BenefitSelectionPanel(
+        public RewardSelectionPanel(
             VisualElementLoader visualElementLoader,
             IAssetLoader        assetLoader,
             PanelStack          panelStack,
@@ -47,17 +47,17 @@ namespace Agroqirax.Benefits
             _loc                 = loc;
         }
 
-        /// <summary>Populates the panel with the offered benefits and pushes it onto the stack.</summary>
-        public void ShowFor(List<IBenefit> offered, Action<IBenefit> onChosen)
+        /// <summary>Populates the panel with the offered rewards and pushes it onto the stack.</summary>
+        public void ShowFor(List<IReward> offered, Action<IReward> onChosen)
         {
             _onChosen = onChosen;
 
             _root = _visualElementLoader.LoadVisualElement(ViewPath);
             _root.Q<Label>("Title").text = _loc.T(TitleLocKey);
 
-            VisualElement container = _root.Q<VisualElement>("BenefitButtons");
-            foreach (IBenefit benefit in offered)
-                container.Add(BuildButton(benefit));
+            VisualElement container = _root.Q<VisualElement>("RewardButtons");
+            foreach (IReward reward in offered)
+                container.Add(BuildButton(reward));
 
             _panelStack.PushDialog(this);
         }
@@ -76,13 +76,13 @@ namespace Agroqirax.Benefits
         // Private helpers
         // ---------------------------------------------------------------
 
-        private VisualElement BuildButton(IBenefit benefit)
+        private VisualElement BuildButton(IReward reward)
         {
             var button = new NineSliceButton();
             button.AddToClassList("menu-button");
             button.AddToClassList("menu-button--stretched");
-            button.AddToClassList("benefit-button");
-            button.RegisterCallback<ClickEvent>(_ => Choose(benefit));
+            button.AddToClassList("reward-button");
+            button.RegisterCallback<ClickEvent>(_ => Choose(reward));
 
             var row = new VisualElement();
             row.style.flexDirection = FlexDirection.Row;
@@ -90,15 +90,15 @@ namespace Agroqirax.Benefits
             row.style.flexGrow      = 1;
             button.Add(row);
 
-            if (benefit.IconPath != null)
+            if (reward.IconPath != null)
             {
-                Sprite? sprite = _assetLoader.Load<Sprite>(benefit.IconPath);
+                Sprite? sprite = _assetLoader.Load<Sprite>(reward.IconPath);
                 if (sprite != null)
                 {
                     var icon = new Image();
                     icon.sprite    = sprite;
                     icon.scaleMode = ScaleMode.ScaleToFit;
-                    icon.AddToClassList("benefit-button__icon");
+                    icon.AddToClassList("reward-button__icon");
 
                     // Read --icon-tint from USS so hover colour is driven declaratively
                     // rather than via MouseEnter/Leave callbacks.
@@ -112,17 +112,17 @@ namespace Agroqirax.Benefits
                 }
             }
 
-            var label = new Label(benefit.GetDisplayName(_loc));
-            label.AddToClassList("benefit-button__label");
+            var label = new Label(reward.GetDisplayName(_loc));
+            label.AddToClassList("reward-button__label");
             row.Add(label);
 
             return button;
         }
 
-        private void Choose(IBenefit benefit)
+        private void Choose(IReward reward)
         {
             _panelStack.Pop(this);
-            _onChosen?.Invoke(benefit);
+            _onChosen?.Invoke(reward);
         }
     }
 }

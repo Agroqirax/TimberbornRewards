@@ -6,31 +6,31 @@ using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using UnityEngine;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
-    public class CycleBenefitService : ILoadableSingleton
+    public class CycleRewardService : ILoadableSingleton
     {
         private const int    OfferedCount = 3;
-        private const string Tag          = "[CycleBenefit]";
+        private const string Tag          = "[CycleReward]";
 
         private readonly EventBus              _eventBus;
-        private readonly BenefitPool           _benefitPool;
-        private readonly BenefitSelectionPanel _selectionPanel;
+        private readonly RewardPool           _rewardPool;
+        private readonly RewardSelectionPanel _selectionPanel;
         private readonly ILoc                  _loc;
         private readonly FactionService        _factionService;
         private readonly System.Random         _random = new();
 
         private bool _enabled;
 
-        public CycleBenefitService(
+        public CycleRewardService(
             EventBus              eventBus,
-            BenefitPool           benefitPool,
-            BenefitSelectionPanel selectionPanel,
+            RewardPool           rewardPool,
+            RewardSelectionPanel selectionPanel,
             ILoc                  loc,
             FactionService        factionService)
         {
             _eventBus       = eventBus;
-            _benefitPool    = benefitPool;
+            _rewardPool    = rewardPool;
             _selectionPanel = selectionPanel;
             _loc            = loc;
             _factionService = factionService;
@@ -39,7 +39,7 @@ namespace Agroqirax.Benefits
         public void Load()
         {
             string factionId = _factionService.Current.Id;
-            _enabled = _benefitPool.InitForFaction(factionId);
+            _enabled = _rewardPool.InitForFaction(factionId);
 
             if (_enabled)
             {
@@ -48,45 +48,45 @@ namespace Agroqirax.Benefits
             }
             else
             {
-                Debug.LogWarning($"{Tag} Disabled — no benefit spec found for faction '{factionId}'.");
+                Debug.LogWarning($"{Tag} Disabled — no reward spec found for faction '{factionId}'.");
             }
         }
 
         [OnEvent]
         public void OnCycleStarted(CycleStartedEvent e)
         {
-            // Cycle 1 fires on initial game load; the first benefit offer is on cycle 2.
+            // Cycle 1 fires on initial game load; the first reward offer is on cycle 2.
             if (e.Cycle <= 1)
                 return;
 
-            Debug.Log($"{Tag} Cycle {e.Cycle} — offering benefits.");
-            List<IBenefit> offered = DrawBenefits(OfferedCount);
-            _selectionPanel.ShowFor(offered, OnBenefitChosen);
+            Debug.Log($"{Tag} Cycle {e.Cycle} — offering rewards.");
+            List<IReward> offered = DrawRewards(OfferedCount);
+            _selectionPanel.ShowFor(offered, OnRewardChosen);
         }
 
-        private void OnBenefitChosen(IBenefit benefit)
+        private void OnRewardChosen(IReward reward)
         {
-            Debug.Log($"{Tag} Applying '{benefit.GetDisplayName(_loc)}'.");
-            benefit.Apply();
+            Debug.Log($"{Tag} Applying '{reward.GetDisplayName(_loc)}'.");
+            reward.Apply();
         }
 
         /// <summary>
-        /// Draws <paramref name="count"/> distinct benefits using weighted random
+        /// Draws <paramref name="count"/> distinct rewards using weighted random
         /// sampling without replacement.
         ///
         /// Each call does a weighted pick from the remaining candidates, removes
-        /// the winner, then repeats — so the same benefit can never appear twice
+        /// the winner, then repeats — so the same reward can never appear twice
         /// regardless of its weight relative to others.
         /// </summary>
-        private List<IBenefit> DrawBenefits(int count)
+        private List<IReward> DrawRewards(int count)
         {
             // Copy the unique weighted entries so we can remove winners without
             // mutating the pool itself.
-            List<(IBenefit Benefit, int Weight)> candidates =
-                new List<(IBenefit, int)>(_benefitPool.UniqueWeighted);
+            List<(IReward Reward, int Weight)> candidates =
+                new List<(IReward, int)>(_rewardPool.UniqueWeighted);
 
             int drawCount = Math.Min(count, candidates.Count);
-            var result    = new List<IBenefit>(drawCount);
+            var result    = new List<IReward>(drawCount);
 
             for (int i = 0; i < drawCount; i++)
             {
@@ -108,7 +108,7 @@ namespace Agroqirax.Benefits
                     }
                 }
 
-                result.Add(candidates[chosen].Benefit);
+                result.Add(candidates[chosen].Reward);
                 candidates.RemoveAt(chosen);
             }
 

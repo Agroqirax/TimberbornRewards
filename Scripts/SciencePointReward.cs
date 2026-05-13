@@ -1,11 +1,11 @@
 using Timberborn.Localization;
 using Timberborn.ScienceSystem;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
-    public class SciencePointBenefit : IBenefit
+    public class SciencePointReward : IReward
     {
-        private static readonly string LocKey   = "CycleBenefit.SciencePoints";
+        private static readonly string LocKey   = "CycleReward.SciencePoints";
         private static readonly string IconPath_ = "sprites/topbar/Science";
 
         private readonly ScienceService _scienceService;
@@ -13,7 +13,7 @@ namespace Agroqirax.Benefits
 
         public string? IconPath => IconPath_;
 
-        public SciencePointBenefit(ScienceService scienceService, int amount)
+        public SciencePointReward(ScienceService scienceService, int amount)
         {
             _scienceService = scienceService;
             _amount         = amount;

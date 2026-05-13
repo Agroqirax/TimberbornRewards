@@ -1,11 +1,11 @@
 using Timberborn.BlueprintSystem;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
     /// <summary>
-    /// A single entry inside a <see cref="FactionBenefitSpec"/> benefits array.
+    /// A single entry inside a <see cref="FactionRewardSpec"/> rewards array.
     /// </summary>
-    public record BenefitEntrySpec
+    public record RewardEntrySpec
     {
         /// <summary>"Science" or "Resource".</summary>
         [Serialize] public string Type   { get; init; } = "";
@@ -19,7 +19,7 @@ namespace Agroqirax.Benefits
         /// </summary>
         [Serialize] public int    Weight { get; init; } = 1;
 
-        /// <summary>GoodSpec Id for Resource benefits (e.g. "Log", "Carrot"). Ignored for Science.</summary>
+        /// <summary>GoodSpec Id for Resource rewards (e.g. "Log", "Carrot"). Ignored for Science.</summary>
         [Serialize] public string GoodId { get; init; } = "";
     }
 }

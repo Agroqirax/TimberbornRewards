@@ -3,7 +3,7 @@ using Timberborn.BlueprintSystem;
 using Timberborn.Goods;
 using UnityEngine;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
     /// <summary>
     /// Lazy lookup from good ID to <see cref="GoodSpec"/>.
@@ -34,7 +34,7 @@ namespace Agroqirax.Benefits
                 if (string.IsNullOrEmpty(spec.Id))
                     continue;
                 if (!index.TryAdd(spec.Id, spec))
-                    Debug.LogWarning($"[CycleBenefit] Duplicate GoodSpec Id '{spec.Id}' — keeping first.");
+                    Debug.LogWarning($"[CycleReward] Duplicate GoodSpec Id '{spec.Id}' — keeping first.");
             }
             return index;
         }

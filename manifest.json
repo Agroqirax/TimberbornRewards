@@ -1,8 +1,8 @@
 {
-  "Name": "Benefits",
+  "Name": "Rewards",
   "Version": "0.1",
-  "Id": "Agroqirax.Benefits",
+  "Id": "Agroqirax.Rewards",
   "MinimumGameVersion": "1.0.7.0",
-  "Description": "Adds a benefit selector at the start of each cycle.",
+  "Description": "Adds a reward selector at the start of each cycle.",
   "RequiredMods": []
 }

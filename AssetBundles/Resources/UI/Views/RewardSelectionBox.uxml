@@ -5,11 +5,11 @@
     <Style src="/Assets/Resources/UI/Views/Core/CoreStyle.uss" />
     <Style src="/Assets/Resources/UI/Views/Common/CommonStyle.uss" />
     <Style src="/Assets/Resources/UI/Views/Common/CommonMiscStyle.uss" />
-    <ui:VisualElement name="BenefitSelectionWrapper" class="grow-centered">
-        <Style src="/Assets/Mods/Benefits/AssetBundles/Resources/UI/Styles/BenefitStyle.uss" />
-        <cui:NineSliceVisualElement name="BenefitSelectionBox" class="options-box sliced-border">
-            <ui:Label name="Title" text="" class="benefit-selection__title" />
-            <ui:VisualElement name="BenefitButtons" />
+    <ui:VisualElement name="RewardSelectionWrapper" class="grow-centered">
+        <Style src="/Assets/Mods/Rewards/AssetBundles/Resources/UI/Styles/RewardStyle.uss" />
+        <cui:NineSliceVisualElement name="RewardSelectionBox" class="options-box sliced-border">
+            <ui:Label name="Title" text="" class="reward-selection__title" />
+            <ui:VisualElement name="RewardButtons" />
         </cui:NineSliceVisualElement>
     </ui:VisualElement>
 </ui:UXML>

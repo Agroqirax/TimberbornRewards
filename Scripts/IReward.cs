@@ -1,11 +1,11 @@
 using Timberborn.Localization;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
     /// <summary>
-    /// A single selectable benefit offered to the player at cycle start.
+    /// A single selectable reward offered to the player at cycle start.
     /// </summary>
-    public interface IBenefit
+    public interface IReward
     {
         /// <summary>Returns the fully resolved display name.</summary>
         string GetDisplayName(ILoc loc);
@@ -16,7 +16,7 @@ namespace Agroqirax.Benefits
         /// </summary>
         string? IconPath { get; }
 
-        /// <summary>Applies this benefit to the game world.</summary>
+        /// <summary>Applies this reward to the game world.</summary>
         void Apply();
     }
 }

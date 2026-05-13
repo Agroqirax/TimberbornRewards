@@ -4,12 +4,12 @@ using Timberborn.Localization;
 using Timberborn.SimpleOutputBuildings;
 using UnityEngine;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
-    public class ResourceBenefit : IBenefit
+    public class ResourceReward : IReward
     {
         // "+{0} {1}" — {0} = amount, {1} = localized good name
-        private static readonly string LocKey = "CycleBenefit.Resource";
+        private static readonly string LocKey = "CycleReward.Resource";
 
         private readonly DistrictCenterRegistry _districtCenterRegistry;
         private readonly string  _goodId;
@@ -19,7 +19,7 @@ namespace Agroqirax.Benefits
 
         public string? IconPath => _iconPath;
 
-        public ResourceBenefit(
+        public ResourceReward(
             DistrictCenterRegistry districtCenterRegistry,
             string  goodId,
             int     amount,
@@ -40,7 +40,7 @@ namespace Agroqirax.Benefits
             DistrictCenter? district = FindLargestDistrict();
             if (district == null)
             {
-                Debug.LogWarning("[CycleBenefit] No finished district center found — resource benefit lost.");
+                Debug.LogWarning("[CycleReward] No finished district center found — resource reward lost.");
                 return;
             }
 
@@ -48,13 +48,13 @@ namespace Agroqirax.Benefits
             if (inventory == null)
             {
                 Debug.LogWarning(
-                    $"[CycleBenefit] District '{district.DistrictName}' has no SimpleOutputInventory " +
-                    "— resource benefit lost.");
+                    $"[CycleReward] District '{district.DistrictName}' has no SimpleOutputInventory " +
+                    "— resource reward lost.");
                 return;
             }
 
             inventory.Inventory.GiveIgnoringCapacity(new GoodAmount(_goodId, _amount));
-            Debug.Log($"[CycleBenefit] Gave {_amount}x {_goodId} to '{district.DistrictName}'.");
+            Debug.Log($"[CycleReward] Gave {_amount}x {_goodId} to '{district.DistrictName}'.");
         }
 
         private DistrictCenter? FindLargestDistrict()

@@ -1,7 +1,7 @@
 {
-  "FactionBenefitSpec": {
+  "FactionRewardSpec": {
     "FactionId": "Emberpelts",
-    "Benefits": [
+    "Rewards": [
       { "Type": "Science", "Amount": 100, "Weight": 2 },
       { "Type": "Science", "Amount": 300, "Weight": 1 },
       { "Type": "Resource", "GoodId": "Log", "Amount": 25, "Weight": 2 },
@@ -11,7 +11,12 @@
       { "Type": "Resource", "GoodId": "Paper", "Amount": 15, "Weight": 1 },
       { "Type": "Resource", "GoodId": "Fuel", "Amount": 20, "Weight": 2 },
       { "Type": "Resource", "GoodId": "Explosives", "Amount": 4, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Catalyst", "Amount": 6, "Weight": 1 }
+      {
+        "Type": "Resource",
+        "GoodId": "PhoenixEssence",
+        "Amount": 6,
+        "Weight": 1
+      }
     ]
   }
 }

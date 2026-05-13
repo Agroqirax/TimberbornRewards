@@ -1,7 +1,7 @@
 {
-  "FactionBenefitSpec": {
+  "FactionRewardSpec": {
     "FactionId": "Folktails",
-    "Benefits": [
+    "Rewards": [
       { "Type": "Science", "Amount": 100, "Weight": 3 },
       { "Type": "Science", "Amount": 250, "Weight": 2 },
       { "Type": "Science", "Amount": 500, "Weight": 1 },

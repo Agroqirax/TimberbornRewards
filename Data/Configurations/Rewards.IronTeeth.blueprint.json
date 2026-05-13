@@ -1,7 +1,7 @@
 {
-  "FactionBenefitSpec": {
+  "FactionRewardSpec": {
     "FactionId": "IronTeeth",
-    "Benefits": [
+    "Rewards": [
       { "Type": "Science", "Amount": 100, "Weight": 2 },
       { "Type": "Science", "Amount": 250, "Weight": 1 },
       { "Type": "Resource", "GoodId": "Log", "Amount": 30, "Weight": 2 },

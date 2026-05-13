@@ -2,7 +2,7 @@ using System;
 using Timberborn.CoreUI;
 using UnityEngine.UIElements;
 
-namespace Agroqirax.Benefits
+namespace Agroqirax.Rewards
 {
     /// <summary>
     /// Mirrors the game's internal <c>NineSliceButton</c>, which is inaccessible
