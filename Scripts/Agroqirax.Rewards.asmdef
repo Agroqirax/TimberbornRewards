@@ -15,10 +15,12 @@
     "Timberborn.GameDistricts",
     "Timberborn.GameFactionSystem",
     "Timberborn.Goods",
+    "Timberborn.HazardousWeatherSystem",
     "Timberborn.Localization",
     "Timberborn.ScienceSystem",
     "Timberborn.SimpleOutputBuildings",
-    "Timberborn.SingletonSystem"
+    "Timberborn.SingletonSystem",
+    "Timberborn.WeatherSystem"
   ],
   "autoReferenced": true,
   "defineConstraints": [],

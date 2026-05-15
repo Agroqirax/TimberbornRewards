@@ -4,6 +4,12 @@
 
 Adds a reward selector at the start of each cycle.
 
+Rewards can:
+
+- Add/subtract Science Points
+- Give a Good
+- Shorten/lengthen the Temperate/Hazardous season
+
 3 rewards are randomly picked from a pool.
 When you select one, that reward gets applied.
 Goods will be delivered to the district center with the largest population.

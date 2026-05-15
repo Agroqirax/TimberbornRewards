@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "",
   "type": "object",
   "properties": {
@@ -8,46 +8,68 @@
       "properties": {
         "FactionId": {
           "type": "string",
-          "minLength": 1
+          "description": "FactionId for this reward pool",
+          "examples": ["Folktails", "IronTeeth", "Emberpelts"]
         },
         "Rewards": {
           "type": "array",
           "uniqueItems": true,
-          "minItems": 1,
+          "description": "Rewards pool",
+          "minItems": 3,
           "items": {
-            "required": ["Type", "Amount", "Weight"],
+            "required": ["Type", "Weight"],
             "type": "object",
+            "title": "Reward",
             "properties": {
               "Type": {
                 "type": "string",
+                "description": "The reward type",
                 "minLength": 1,
-                "enum": ["Science", "Resource"]
+                "enum": ["Science", "Resource", "Weather"]
               },
               "GoodId": {
                 "type": "string",
+                "description": "The GoodId of the good to give",
                 "minLength": 1
               },
               "Amount": {
-                "type": "number"
+                "type": "integer",
+                "description": "The amount of sp or good to give.\nMay only be negative for types: Science, Weather",
+                "not": {
+                  "const": 0
+                }
+              },
+              "Season": {
+                "type": "string",
+                "description": "The season to affect",
+                "enum": ["Temperate", "Hazardous"]
               },
               "Weight": {
-                "type": "number"
+                "type": "number",
+                "description": "The base weight",
+                "minimum": 1
               },
               "WeightCurve": {
                 "type": "object",
+                "description": "Weight curve",
                 "properties": {
                   "Keyframes": {
                     "type": "array",
+                    "description": "List of keyframes",
                     "uniqueItems": true,
                     "minItems": 1,
                     "items": {
                       "required": ["Cycle", "Multiplier"],
                       "properties": {
                         "Cycle": {
-                          "type": "number"
+                          "type": "number",
+                          "description": "Cycle number",
+                          "minimum": 1
                         },
                         "Multiplier": {
-                          "type": "number"
+                          "type": "number",
+                          "description": "Weight multiplier",
+                          "minimum": 0
                         }
                       }
                     }

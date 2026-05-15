@@ -1,4 +1,7 @@
 ID,Text,Comment
 CycleReward.ChooseTitle,Kies een Cyclus Bonus,Title shown at the top of the reward selection panel
-CycleReward.SciencePoints,+{0} Kennis,"{0} is the amount, e.g. ""+150 Science Points"""
-CycleReward.Resource,+{0} {1},"{0} = amount; {1} = localized good name, e.g. ""+30 Logs"""
+CycleReward.SciencePoints,{0} Kennis,"{0} is the amount"
+CycleReward.Resource,+{0} {1},"{0} = amount; {1} = localized good name"
+CycleReward.Weather,{0} {1} dagen,"{0} = signed day count; {1} = localized season name"
+CycleReward.Weather.Temperate,gematigde,Season name for the temperate season
+CycleReward.Weather.Hazardous,gevaarlijke,Season name for the hazardous season
