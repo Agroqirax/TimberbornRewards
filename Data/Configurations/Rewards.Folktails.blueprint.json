@@ -2,7 +2,7 @@
   "FactionRewardSpec": {
     "FactionId": "Folktails",
     "Rewards": [
-      { "Type": "Science", "Amount": -100, "Weight": 3 },
+      { "Type": "Science", "Amount": 100, "Weight": 3 },
       { "Type": "Science", "Amount": 250, "Weight": 2 },
       { "Type": "Science", "Amount": 500, "Weight": 1 },
       { "Type": "Resource", "GoodId": "Log", "Amount": 40, "Weight": 3 },
