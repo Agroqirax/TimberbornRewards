@@ -10,6 +10,7 @@ Rewards can:
 - Give a Good
 - Shorten/lengthen the Temperate/Hazardous season
 - Change the beavers needs (i.e. quench thirst / decontaminate instantly)
+- Unlock a building
 
 3 rewards are randomly picked from a pool.
 When you select one, that reward gets applied.

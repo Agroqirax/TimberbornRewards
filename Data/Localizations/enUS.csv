@@ -6,3 +6,4 @@ CycleReward.Weather,{0} {1} Days,"{0} = signed day count e.g. ""+3"" or ""-5""; 
 CycleReward.Weather.Temperate,Temperate,Season name for the temperate season
 CycleReward.Weather.Hazardous,Hazardous,Season name for the hazardous season
 CycleReward.Need,{0} {1} for all {2},"{0} = signed delta; {1} = need display name; {2} = Beavers or Bots"
+CycleReward.BuildingUnlock,Unlock {0},"{0} = localized building display name, e.g. ""Unlock Water Wheel"""

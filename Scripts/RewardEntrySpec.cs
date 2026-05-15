@@ -8,7 +8,7 @@ namespace Agroqirax.Rewards
     /// </summary>
     public record RewardEntrySpec
     {
-        /// <summary>"Science", "Resource", "Weather", or "Need".</summary>
+        /// <summary>"Science", "Resource", "Weather", "Need", or "Building".</summary>
         [Serialize] public string Type { get; init; } = "";
 
         /// <summary>
@@ -18,6 +18,7 @@ namespace Agroqirax.Rewards
         /// Weather  : days to add/remove from the season (integer; positive = longer, negative = shorter).
         /// Need     : raw points delta on the need's own scale (float; positive fills, negative drains).
         ///            e.g. Sleep has a range of [-0.2, 0.8], so 0.5 is a large fill.
+        /// Building : not used — omit or set to 0.
         /// </summary>
         [Serialize] public float Amount { get; init; }
 
@@ -45,6 +46,14 @@ namespace Agroqirax.Rewards
         [Serialize] public string NeedId { get; init; } = "";
 
         /// <summary>
+        /// For Building rewards: the template name of the building to unlock, as it
+        /// appears in <c>BuildingService.GetTemplateName</c> / <c>TemplateSpec.TemplateName</c>
+        /// (e.g. "WaterWheel", "Beehive.Folktails").
+        /// Ignored for other types.
+        /// </summary>
+        [Serialize] public string BuildingTemplateName { get; init; } = "";
+
+        /// <summary>
         /// Optional piecewise-linear curve that scales <see cref="Weight"/> by
         /// the current cycle number. When null the base weight is used every cycle.
         /// If the resolved weight is &lt;= 0 the entry is excluded from the draw
@@ -63,6 +72,5 @@ namespace Agroqirax.Rewards
                 return effectiveBase;
             return effectiveBase * WeightCurve.Evaluate(cycle);
         }
-
     }
 }

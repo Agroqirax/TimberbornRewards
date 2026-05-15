@@ -26,7 +26,7 @@
                 "type": "string",
                 "description": "The reward type",
                 "minLength": 1,
-                "enum": ["Science", "Resource", "Weather", "Need"]
+                "enum": ["Science", "Resource", "Weather", "Need", "Building"]
               },
               "GoodId": {
                 "type": "string",
@@ -48,6 +48,11 @@
               "NeedId": {
                 "type": "string",
                 "description": "The NeedId of the need to change",
+                "minLength": 1
+              },
+              "BuildingTemplateName": {
+                "type": "string",
+                "description": "The TemplateName of the building to unlock",
                 "minLength": 1
               },
               "Weight": {

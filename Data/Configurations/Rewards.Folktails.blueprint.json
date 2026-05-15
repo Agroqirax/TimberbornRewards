@@ -63,6 +63,11 @@
             { "Cycle": 10, "Multiplier": 1.0 }
           ]
         }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Forester.Folktails",
+        "Weight": 5
       }
     ]
   }

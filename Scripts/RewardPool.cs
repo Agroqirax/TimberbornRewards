@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Timberborn.BlueprintSystem;
+using Timberborn.BlockObjectTools;
+using Timberborn.Buildings;
+using Timberborn.EntitySystem;
 using Timberborn.GameCycleSystem;
 using Timberborn.GameDistricts;
 using Timberborn.GameFactionSystem;
@@ -10,6 +13,9 @@ using Timberborn.HazardousWeatherSystem;
 using Timberborn.NeedSpecs;
 using Timberborn.ScienceSystem;
 using Timberborn.WeatherSystem;
+using Timberborn.TemplateSystem;
+using Timberborn.ToolButtonSystem;
+using Timberborn.ToolSystem;
 using UnityEngine;
 
 namespace Agroqirax.Rewards
@@ -20,6 +26,9 @@ namespace Agroqirax.Rewards
     /// Weights are NOT baked at load time; call <see cref="GetWeightedForCycle"/>
     /// each draw so that <see cref="RewardEntrySpec.WeightCurve"/> can vary the
     /// effective weight (and eligibility) per cycle.
+    ///
+    /// For <c>Building</c> rewards, entries whose building is already unlocked are
+    /// excluded from the draw entirely — they would be meaningless to offer.
     /// </summary>
     public class RewardPool
     {
@@ -31,6 +40,10 @@ namespace Agroqirax.Rewards
         private readonly HazardousWeatherService         _hazardousWeatherService;
         private readonly GameCycleService                _gameCycleService;
         private readonly FactionNeedService              _factionNeedService;
+        private readonly BuildingService                 _buildingService;
+        private readonly BuildingUnlockingService        _buildingUnlockingService;
+        private readonly ToolUnlockingService            _toolUnlockingService;
+        private readonly ToolButtonService               _toolButtonService;
 
         /// <summary>Pairs of (reward, entry-spec) built for the current faction.</summary>
         private List<(IReward Reward, RewardEntrySpec Entry)> _entries
@@ -44,7 +57,11 @@ namespace Agroqirax.Rewards
             TemperateWeatherDurationService temperateWeatherDurationService,
             HazardousWeatherService         hazardousWeatherService,
             GameCycleService                gameCycleService,
-            FactionNeedService              factionNeedService)
+            FactionNeedService              factionNeedService,
+            BuildingService                 buildingService,
+            BuildingUnlockingService        buildingUnlockingService,
+            ToolUnlockingService            toolUnlockingService,
+            ToolButtonService               toolButtonService)
         {
             _specService                     = specService;
             _scienceService                  = scienceService;
@@ -54,6 +71,10 @@ namespace Agroqirax.Rewards
             _hazardousWeatherService         = hazardousWeatherService;
             _gameCycleService                = gameCycleService;
             _factionNeedService              = factionNeedService;
+            _buildingService                 = buildingService;
+            _buildingUnlockingService        = buildingUnlockingService;
+            _toolUnlockingService            = toolUnlockingService;
+            _toolButtonService               = toolButtonService;
         }
 
         /// <summary>
@@ -68,7 +89,12 @@ namespace Agroqirax.Rewards
 
         /// <summary>
         /// Returns (reward, weight) pairs eligible for the given cycle.
-        /// Entries whose effective weight evaluates to &lt;= 0 are excluded entirely.
+        /// Entries are excluded when:
+        /// <list type="bullet">
+        ///   <item>their effective weight evaluates to &lt;= 0 for this cycle, or</item>
+        ///   <item>they are a <see cref="BuildingUnlockReward"/> for a building the
+        ///         player has already unlocked.</item>
+        /// </list>
         /// </summary>
         public List<(IReward Reward, float Weight)> GetWeightedForCycle(int cycle)
         {
@@ -76,8 +102,15 @@ namespace Agroqirax.Rewards
             foreach (var (reward, entry) in _entries)
             {
                 float w = entry.GetWeightAt(cycle);
-                if (w > 0f)
-                    result.Add((reward, w));
+                if (w <= 0f)
+                    continue;
+
+                // Skip building unlocks that are already owned — pointless to offer.
+                if (reward is BuildingUnlockReward unlockReward
+                    && IsAlreadyUnlocked(entry.BuildingTemplateName))
+                    continue;
+
+                result.Add((reward, w));
             }
             return result;
         }
@@ -85,6 +118,22 @@ namespace Agroqirax.Rewards
         // ---------------------------------------------------------------
         // Private helpers
         // ---------------------------------------------------------------
+
+        private bool IsAlreadyUnlocked(string templateName)
+        {
+            if (string.IsNullOrEmpty(templateName))
+                return false;
+            try
+            {
+                BuildingSpec spec = _buildingService.GetBuildingTemplate(templateName);
+                return _buildingUnlockingService.Unlocked(spec);
+            }
+            catch
+            {
+                // GetBuildingTemplate throws if the name isn't found; treat as not unlocked.
+                return false;
+            }
+        }
 
         private List<(IReward, RewardEntrySpec)> BuildEntries(string factionId)
         {
@@ -147,6 +196,9 @@ namespace Agroqirax.Rewards
                 case "Need":
                     return CreateNeedReward(entry);
 
+                case "Building":
+                    return CreateBuildingUnlockReward(entry);
+
                 default:
                     Debug.LogWarning(
                         $"[CycleReward] Unknown reward type '{entry.Type}' — skipping entry.");
@@ -197,9 +249,6 @@ namespace Agroqirax.Rewards
                 return null;
             }
 
-            // NeedSpec.CharacterType is authoritative — a need belongs to either
-            // "Beaver" or "Bot", never both. Look it up once and derive everything
-            // from it; no "Character" field is needed in the blueprint.
             var beaverNeeds = _factionNeedService.GetBeaverNeeds().ToList();
             var botNeeds    = _factionNeedService.GetBotNeeds().ToList();
 
@@ -226,6 +275,58 @@ namespace Agroqirax.Rewards
                 entry.Amount,
                 needSpec.DisplayNameLocKey,
                 target);
+        }
+
+        private IReward? CreateBuildingUnlockReward(RewardEntrySpec entry)
+        {
+            if (string.IsNullOrEmpty(entry.BuildingTemplateName))
+            {
+                Debug.LogWarning(
+                    "[CycleReward] Building reward is missing BuildingTemplateName — skipping entry.");
+                return null;
+            }
+
+            BuildingSpec buildingSpec;
+            try
+            {
+                buildingSpec = _buildingService.GetBuildingTemplate(entry.BuildingTemplateName);
+            }
+            catch
+            {
+                Debug.LogWarning(
+                    $"[CycleReward] Building '{entry.BuildingTemplateName}' not found — skipping entry.");
+                return null;
+            }
+
+            // Buildings with ScienceCost == 0 are always free; offering an
+            // "unlock" for them would be meaningless.
+            if (buildingSpec.ScienceCost == 0)
+            {
+                Debug.LogWarning(
+                    $"[CycleReward] Building '{entry.BuildingTemplateName}' has no science cost " +
+                    "(it is always available) — skipping entry.");
+                return null;
+            }
+
+            LabeledEntitySpec? labelSpec = buildingSpec.GetSpec<LabeledEntitySpec>();
+            if (labelSpec == null)
+            {
+                Debug.LogWarning(
+                    $"[CycleReward] Building '{entry.BuildingTemplateName}' has no LabeledEntitySpec — skipping entry.");
+                return null;
+            }
+
+            string? iconPath = string.IsNullOrEmpty(labelSpec.Icon.Path) ? null : labelSpec.Icon.Path;
+            string templateName = _buildingService.GetTemplateName(buildingSpec);
+
+            return new BuildingUnlockReward(
+                _buildingUnlockingService,
+                _toolUnlockingService,
+                _toolButtonService,
+                buildingSpec,
+                labelSpec.DisplayNameLocKey,
+                templateName,
+                iconPath);
         }
     }
 }
