@@ -1,3 +1,4 @@
+#nullable enable
 using Timberborn.Localization;
 
 namespace Agroqirax.Rewards

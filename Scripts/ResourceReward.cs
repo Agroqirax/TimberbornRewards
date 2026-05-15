@@ -1,3 +1,4 @@
+#nullable enable
 using Timberborn.GameDistricts;
 using Timberborn.Goods;
 using Timberborn.Localization;

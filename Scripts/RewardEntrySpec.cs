@@ -1,3 +1,4 @@
+#nullable enable
 using Timberborn.BlueprintSystem;
 
 namespace Agroqirax.Rewards

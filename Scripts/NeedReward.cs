@@ -1,3 +1,4 @@
+#nullable enable
 using Timberborn.Beavers;
 using Timberborn.Bots;
 using Timberborn.Effects;
