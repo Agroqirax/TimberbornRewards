@@ -49,24 +49,9 @@
           ]
         }
       },
-      {
-        "Type": "Need",
-        "NeedId": "Sleep",
-        "Amount": 0.5,
-        "Weight": 2
-      },
-      {
-        "Type": "Need",
-        "NeedId": "Thirst",
-        "Amount": 0.5,
-        "Weight": 2
-      },
-      {
-        "Type": "Need",
-        "NeedId": "Hunger",
-        "Amount": 0.5,
-        "Weight": 2
-      },
+      { "Type": "Need", "NeedId": "Sleep", "Amount": 0.5, "Weight": 2 },
+      { "Type": "Need", "NeedId": "Thirst", "Amount": 0.5, "Weight": 2 },
+      { "Type": "Need", "NeedId": "Hunger", "Amount": 0.5, "Weight": 2 },
       {
         "Type": "Need",
         "NeedId": "BadwaterContamination",
