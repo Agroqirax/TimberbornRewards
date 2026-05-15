@@ -1,8 +1,10 @@
 ID,Text,Comment
 CycleReward.ChooseTitle,Wähle einen Zyklusvorteil aus,Title shown at the top of the reward selection panel
-CycleReward.SciencePoints,{0} Wissenschaftspunkte,"{0} is the amount"
+CycleReward.SciencePoints.DisplayName,{0} Wissenschaftspunkt,"{0} is the amount"
+CycleReward.SciencePoints.PluralDisplayName,{0} Wissenschaftspunkte,"{0} is the amount"
 CycleReward.Resource,+{0} {1},"{0} = amount; {1} = localized good name"
-CycleReward.Weather,{0} {1} Tage,"{0} = signed day count; {1} = localized season name"
+CycleReward.Weather.DisplayName,{0} {1} Tag,"{0} = signed day count; {1} = localized season name"
+CycleReward.Weather.PluralDisplayName,{0} {1} Tage,"{0} = signed day count; {1} = localized season name"
 CycleReward.Weather.Temperate,Gemäßigt,Season name for the temperate season
 CycleReward.Weather.Hazardous,Gefährlich,Season name for the hazardous season
 CycleReward.Need,{0} {1} für alle {2},"{0} = signed delta; {1} = need display name; {2} = Beavers or Bots"

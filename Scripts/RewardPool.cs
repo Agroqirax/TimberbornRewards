@@ -106,7 +106,7 @@ namespace Agroqirax.Rewards
                     continue;
 
                 // Skip building unlocks that are already owned — pointless to offer.
-                if (reward is BuildingUnlockReward unlockReward
+                if (reward is BuildingUnlockReward
                     && IsAlreadyUnlocked(entry.BuildingTemplateName))
                     continue;
 
@@ -184,10 +184,11 @@ namespace Agroqirax.Rewards
                     }
                     return new ResourceReward(
                         _districtCenterRegistry,
-                        goodId:      entry.GoodId,
-                        amount:      Mathf.RoundToInt(entry.Amount),
-                        displayName: goodSpec.DisplayName.Value,
-                        iconPath:    goodSpec.Icon.Path);
+                        goodId:             entry.GoodId,
+                        amount:             Mathf.RoundToInt(entry.Amount),
+                        displayName:        goodSpec.DisplayName.Value,
+                        pluralDisplayName:  goodSpec.PluralDisplayName.Value,
+                        iconPath:           goodSpec.Icon.Path);
                 }
 
                 case "Weather":

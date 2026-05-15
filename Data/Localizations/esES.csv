@@ -1,8 +1,10 @@
 ID,Text,Comment
 CycleReward.ChooseTitle,Elige una recompensa por ciclo,Title shown at the top of the reward selection panel
-CycleReward.SciencePoints,{0} Puntos de ciencia,"{0} is the amount"
+CycleReward.SciencePoints.DisplayName,{0} Punto de ciencia,"{0} is the amount"
+CycleReward.SciencePoints.PluralDisplayName,{0} Puntos de ciencia,"{0} is the amount"
 CycleReward.Resource,+{0} {1},"{0} = amount; {1} = localized good name"
-CycleReward.Weather,{0} días {1},"{0} = signed day count; {1} = localized season name"
+CycleReward.Weather.DisplayName,{0} día {1},"{0} = signed day count; {1} = localized season name"
+CycleReward.Weather.PluralDisplayName,{0} días {1},"{0} = signed day count; {1} = localized season name"
 CycleReward.Weather.Temperate,templados,Season name for the temperate season
 CycleReward.Weather.Hazardous,peligrosos,Season name for the hazardous season
 CycleReward.Need,{0} {1} para todos los {2},"{0} = signed delta; {1} = need display name; {2} = Beavers or Bots"

@@ -22,9 +22,10 @@ namespace Agroqirax.Rewards
     /// </summary>
     public class WeatherReward : IReward
     {
-        private const string WeatherLocKey   = "CycleReward.Weather";
-        private const string TemperateLocKey = "CycleReward.Weather.Temperate";
-        private const string HazardousLocKey = "CycleReward.Weather.Hazardous";
+        private const string WeatherPluralLocKey  = "CycleReward.Weather.PluralDisplayName";
+        private const string WeatherSingularLocKey = "CycleReward.Weather.DisplayName";
+        private const string TemperateLocKey      = "CycleReward.Weather.Temperate";
+        private const string HazardousLocKey      = "CycleReward.Weather.Hazardous";
 
         private const int MinDurationDays = 1;
 
@@ -83,10 +84,10 @@ namespace Agroqirax.Rewards
 
         public string GetDisplayName(ILoc loc)
         {
-            // Format Amount as an explicitly signed integer: "+3" or "-5".
             string signedAmount = Amount > 0 ? $"+{Amount}" : Amount.ToString();
             string seasonName   = loc.T(Season == WeatherType.Temperate ? TemperateLocKey : HazardousLocKey);
-            return loc.T(WeatherLocKey, signedAmount, seasonName);
+            string dayLocKey    = Math.Abs(Amount) == 1 ? WeatherSingularLocKey : WeatherPluralLocKey;
+            return loc.T(dayLocKey, signedAmount, seasonName);
         }
 
         public void Apply()
@@ -98,8 +99,6 @@ namespace Agroqirax.Rewards
             else
                 ApplyToHazardous();
 
-            // Recompute from authoritative sources so the cached value is correct
-            // even when the clamp fires.
             int newTotal = _temperateService.TemperateWeatherDuration
                          + _hazardousService.HazardousWeatherDuration;
             CycleDurationInDaysField.SetValue(_gameCycleService, newTotal);

@@ -6,8 +6,9 @@ namespace Agroqirax.Rewards
 {
     public class SciencePointReward : IReward
     {
-        private static readonly string LocKey    = "CycleReward.SciencePoints";
-        private static readonly string IconPath_ = "sprites/topbar/Science";
+        private static readonly string SingularLocKey = "CycleReward.SciencePoints.DisplayName";
+        private static readonly string PluralLocKey   = "CycleReward.SciencePoints.PluralDisplayName";
+        private static readonly string IconPath_      = "sprites/topbar/Science";
 
         private readonly ScienceService _scienceService;
         private readonly int            _amount;
@@ -22,8 +23,9 @@ namespace Agroqirax.Rewards
 
         public string GetDisplayName(ILoc loc)
         {
-            string signed = _amount > 0 ? $"+{_amount}" : _amount.ToString();
-            return loc.T(LocKey, signed);
+            string signed  = _amount > 0 ? $"+{_amount}" : _amount.ToString();
+            string locKey  = _amount == 1 ? SingularLocKey : PluralLocKey;
+            return loc.T(locKey, signed);
         }
 
         public void Apply() => _scienceService.AddPoints(_amount);

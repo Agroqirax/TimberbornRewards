@@ -16,6 +16,7 @@ namespace Agroqirax.Rewards
         private readonly string  _goodId;
         private readonly int     _amount;
         private readonly string  _displayName;
+        private readonly string  _pluralDisplayName;
         private readonly string? _iconPath;
 
         public string? IconPath => _iconPath;
@@ -25,16 +26,22 @@ namespace Agroqirax.Rewards
             string  goodId,
             int     amount,
             string  displayName,
+            string  pluralDisplayName,
             string? iconPath)
         {
             _districtCenterRegistry = districtCenterRegistry;
-            _goodId      = goodId;
-            _amount      = amount;
-            _displayName = displayName;
-            _iconPath    = iconPath;
+            _goodId                 = goodId;
+            _amount                 = amount;
+            _displayName            = displayName;
+            _pluralDisplayName      = pluralDisplayName;
+            _iconPath               = iconPath;
         }
 
-        public string GetDisplayName(ILoc loc) => loc.T(LocKey, _amount, _displayName);
+        public string GetDisplayName(ILoc loc)
+        {
+            string goodName = _amount == 1 ? _displayName : _pluralDisplayName;
+            return loc.T(LocKey, _amount, goodName);
+        }
 
         public void Apply()
         {
