@@ -21,7 +21,6 @@
         "Weight": 1
       },
       { "Type": "Resource", "GoodId": "MetalBlock", "Amount": 4, "Weight": 1 },
-
       { "Type": "Weather", "Season": "Temperate", "Amount": 3, "Weight": 3 },
       { "Type": "Weather", "Season": "Temperate", "Amount": 5, "Weight": 1 },
       {
@@ -47,6 +46,36 @@
             { "Cycle": 1, "Multiplier": 0.0 },
             { "Cycle": 10, "Multiplier": 0.0 },
             { "Cycle": 20, "Multiplier": 1.0 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "NeedId": "Sleep",
+        "Amount": 0.5,
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "NeedId": "Thirst",
+        "Amount": 0.5,
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "NeedId": "Hunger",
+        "Amount": 0.5,
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "NeedId": "BadwaterContamination",
+        "Amount": 1.0,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.0 },
+            { "Cycle": 10, "Multiplier": 1.0 }
           ]
         }
       }

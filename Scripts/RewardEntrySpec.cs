@@ -7,32 +7,41 @@ namespace Agroqirax.Rewards
     /// </summary>
     public record RewardEntrySpec
     {
-        /// <summary>"Science", "Resource", or "Weather".</summary>
-        [Serialize] public string Type   { get; init; } = "";
+        /// <summary>"Science", "Resource", "Weather", or "Need".</summary>
+        [Serialize] public string Type { get; init; } = "";
 
         /// <summary>
         /// The numeric value this reward operates on.
-        /// Science: science points to add.
-        /// Resource: units of the good to give.
-        /// Weather: days to add (positive) or remove (negative) from the season.
+        /// Science  : science points to add (integer).
+        /// Resource : units of the good to give (integer).
+        /// Weather  : days to add/remove from the season (integer; positive = longer, negative = shorter).
+        /// Need     : raw points delta on the need's own scale (float; positive fills, negative drains).
+        ///            e.g. Sleep has a range of [-0.2, 0.8], so 0.5 is a large fill.
         /// </summary>
-        [Serialize] public int    Amount { get; init; }
+        [Serialize] public float Amount { get; init; }
 
         /// <summary>
         /// Base probability weight. An entry with Weight 3 is three times as
         /// likely to appear as one with Weight 1 (before any curve scaling).
         /// Defaults to 1 if omitted.
         /// </summary>
-        [Serialize] public int    Weight { get; init; } = 1;
+        [Serialize] public int Weight { get; init; } = 1;
 
         /// <summary>GoodSpec Id for Resource rewards (e.g. "Log", "Carrot"). Ignored for other types.</summary>
         [Serialize] public string GoodId { get; init; } = "";
 
         /// <summary>
-        /// For Weather rewards: "Temperate" or "Hazardous".
-        /// Ignored for other reward types.
+        /// For Weather rewards: "Temperate" or "Hazardous". Ignored for other types.
         /// </summary>
         [Serialize] public string Season { get; init; } = "";
+
+        /// <summary>
+        /// For Need rewards: the NeedSpec Id to modify.
+        /// Vanilla beaver IDs: BadwaterContamination, Campfire, ChippedTeeth, Hunger,
+        /// Injury, Lantern, Roof, RooftopTerrace, Shelter, Shrub, Sleep, Thirst, WetFur.
+        /// Ignored for other types.
+        /// </summary>
+        [Serialize] public string NeedId { get; init; } = "";
 
         /// <summary>
         /// Optional piecewise-linear curve that scales <see cref="Weight"/> by
@@ -53,5 +62,6 @@ namespace Agroqirax.Rewards
                 return effectiveBase;
             return effectiveBase * WeightCurve.Evaluate(cycle);
         }
+
     }
 }

@@ -9,7 +9,9 @@
   "precompiledReferences": [
     "Bindito.Core",
     "Timberborn.AssetSystem",
+    "Timberborn.Beavers",
     "Timberborn.BlueprintSystem",
+    "Timberborn.Bots",
     "Timberborn.CoreUI",
     "Timberborn.GameCycleSystem",
     "Timberborn.GameDistricts",
@@ -17,6 +19,8 @@
     "Timberborn.Goods",
     "Timberborn.HazardousWeatherSystem",
     "Timberborn.Localization",
+    "Timberborn.NeedSystem",
+    "Timberborn.NeedSpecs",
     "Timberborn.ScienceSystem",
     "Timberborn.SimpleOutputBuildings",
     "Timberborn.SingletonSystem",
