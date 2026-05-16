@@ -9,3 +9,5 @@ CycleReward.Weather.Temperate,templados,Season name for the temperate season
 CycleReward.Weather.Hazardous,peligrosos,Season name for the hazardous season
 CycleReward.Need,{0} {1} para todos los {2},"{0} = signed delta; {1} = need display name; {2} = Beavers or Bots"
 CycleReward.BuildingUnlock,Desbloquear {0},"{0} = localized building display name"
+CycleReward.Mystery.DisplayName,??? Recompensa misteriosa ???,Label shown on the hidden/mystery reward button
+CycleReward.Mystery.RevealTitle,Has recibido,Title shown on the mystery reward reveal popup

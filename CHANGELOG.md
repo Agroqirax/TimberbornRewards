@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6] - 2026-05-16
+
+### Added
+
+- Mystery reward
+
 ## [0.5] - 2026-05-15
 
 ### Added

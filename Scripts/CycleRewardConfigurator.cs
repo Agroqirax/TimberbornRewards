@@ -9,6 +9,7 @@ namespace Agroqirax.Rewards
         {
             Bind<GoodSpecRepository>().AsSingleton();
             Bind<RewardPool>().AsSingleton();
+            Bind<MysteryRevealPanel>().AsSingleton();
             Bind<RewardSelectionPanel>().AsSingleton();
             Bind<CycleRewardService>().AsSingleton();
         }

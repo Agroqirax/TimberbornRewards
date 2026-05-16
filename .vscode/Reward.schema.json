@@ -58,7 +58,7 @@
               "Weight": {
                 "type": "number",
                 "description": "The base weight",
-                "minimum": 1
+                "exclusiveMinimum": 0
               },
               "WeightCurve": {
                 "type": "object",

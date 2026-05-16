@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:cui="Timberborn.CoreUI"
+    xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements"
+    noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False">
+    <Style src="/Assets/Resources/UI/Views/Core/CoreStyle.uss" />
+    <Style src="/Assets/Resources/UI/Views/Common/CommonStyle.uss" />
+    <Style src="/Assets/Resources/UI/Views/Common/CommonMiscStyle.uss" />
+    <ui:VisualElement name="MysteryRevealWrapper" class="grow-centered">
+        <Style src="/Assets/Mods/Rewards/AssetBundles/Resources/UI/Styles/RewardStyle.uss" />
+        <cui:NineSliceVisualElement name="MysteryRevealBox" class="options-box sliced-border">
+            <ui:Label name="RevealTitle" text="" class="reward-selection__title" />
+            <ui:VisualElement name="RevealIconRow" class="mystery-reveal__icon-row">
+                <ui:Image name="RevealIcon" class="mystery-reveal__icon" />
+                <ui:Label name="RevealRewardName" text="" class="mystery-reveal__reward-name" />
+            </ui:VisualElement>
+            <cui:LocalizableButton name="OkButton" text-loc-key="Core.OK"
+                class="menu-button menu-button--stretched mystery-reveal__ok-button" />
+        </cui:NineSliceVisualElement>
+    </ui:VisualElement>
+</ui:UXML>

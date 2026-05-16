@@ -47,3 +47,74 @@
 .reward-button:hover:enabled .reward-button__label {
   color: rgb(0, 0, 0);
 }
+
+/* -----------------------------------------------------------------------
+ * Mystery button — the third slot whose contents are hidden from the player.
+ * The button itself uses the same nine-slice/menu-button background as the
+ * others so it blends in structurally, but the icon and label are styled to
+ * signal "unknown" without looking broken.
+ * ----------------------------------------------------------------------- */
+
+/*
+ * Slightly desaturated / dimmed tint so the question-mark reads as "unknown"
+ * rather than just another coloured icon. On hover the tint flips to black
+ * just like the normal buttons (inherited from .reward-button:hover:enabled).
+ */
+.reward-button--mystery {
+  --icon-tint: rgb(180, 180, 200);
+}
+
+/*
+ * The question-mark icon pulses gently to draw the eye without being
+ * distracting. The animation is purely declarative CSS — no C# required.
+ */
+.reward-button__icon--mystery {
+  transition-property: opacity;
+  transition-duration: 0.9s;
+  transition-timing-function: ease-in-out;
+}
+
+/*
+ * Mystery label: italic, slightly muted, with wide letter-spacing to give a
+ * "redacted / classified" feel. On hover the label flips to black like normal
+ * (inherited from .reward-button:hover:enabled .reward-button__label).
+ */
+.reward-button__label--mystery {
+  -unity-font-style: bold-and-italic;
+  color: rgb(200, 195, 220);
+  letter-spacing: 2px;
+}
+
+/* -----------------------------------------------------------------------
+ * Mystery reveal panel — shown after the player picks the mystery reward.
+ * Reuses the same options-box / sliced-border shell as the selection panel.
+ * ----------------------------------------------------------------------- */
+
+.mystery-reveal__icon-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.mystery-reveal__icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.mystery-reveal__reward-name {
+  -unity-font-style: bold;
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+  -unity-text-align: middle-left;
+  white-space: normal;
+  flex-shrink: 1;
+}
+
+.mystery-reveal__ok-button {
+  align-self: center;
+  min-width: 80px;
+}
