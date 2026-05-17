@@ -521,8 +521,21 @@
         "Weight": 1,
         "WeightCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 8, "Multiplier": 1 }
+            { "Cycle": 5, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 },
+            { "Cycle": 20, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Bot",
+        "Amount": 3,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 8, "Multiplier": 0 },
+            { "Cycle": 13, "Multiplier": 1 }
           ]
         }
       }
