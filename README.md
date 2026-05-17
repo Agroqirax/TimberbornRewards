@@ -2,19 +2,19 @@
 
 <img src="Root/thumbnail.png" alt="Thumbnail" width="480"/>
 
-Adds a reward selector at the start of each cycle.
+Every cycle you get to chose one of 3 randomly picked rewards.
 
 Rewards can:
 
-- Add/subtract Science Points
+- Add Science Points
 - Give a Good
-- Shorten/lengthen the Temperate/Hazardous season
+- Change the length of seasons
 - Change the beavers needs (i.e. quench thirst / decontaminate instantly)
 - Unlock a building
 
-3 rewards are randomly picked from a pool.
 When you select one, that reward gets applied.
 Goods will be delivered to the district center with the largest population.
+Needs are applied to all beavers.
 
 ## Download
 
