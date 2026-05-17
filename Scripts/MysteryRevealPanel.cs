@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using Timberborn.AssetSystem;
 using Timberborn.CoreUI;
 using Timberborn.Localization;
@@ -7,17 +8,6 @@ using UnityEngine.UIElements;
 
 namespace Agroqirax.Rewards
 {
-    /// <summary>
-    /// A one-shot dialog pushed onto the panel stack after the player picks the
-    /// mystery reward. Shows the real reward's icon, its resolved display name,
-    /// and an OK button to dismiss.
-    ///
-    /// <para>
-    /// Follows the same load-fresh-UXML-per-show pattern as
-    /// <see cref="RewardSelectionPanel"/>. The reward has already been applied
-    /// by the time this panel is shown — it is purely informational.
-    /// </para>
-    /// </summary>
     public class MysteryRevealPanel : IPanelController
     {
         private static readonly string ViewPath    = "MysteryRevealBox";
@@ -29,6 +19,7 @@ namespace Agroqirax.Rewards
         private readonly ILoc                _loc;
 
         private VisualElement? _root;
+        private Action?        _onDismissed;
 
         public MysteryRevealPanel(
             VisualElementLoader visualElementLoader,
@@ -42,19 +33,14 @@ namespace Agroqirax.Rewards
             _loc                 = loc;
         }
 
-        /// <summary>
-        /// Builds the reveal panel for <paramref name="reward"/> and pushes it
-        /// onto the stack. The reward must already have been applied before
-        /// calling this.
-        /// </summary>
-        public void ShowFor(IReward reward)
+        public void ShowFor(IReward reward, Action onDismissed)
         {
+            _onDismissed = onDismissed;
             _root = _visualElementLoader.LoadVisualElement(ViewPath);
 
-            _root.Q<Label>("RevealTitle").text = _loc.T(TitleLocKey);
+            _root.Q<Label>("RevealTitle").text      = _loc.T(TitleLocKey);
             _root.Q<Label>("RevealRewardName").text = reward.GetDisplayName(_loc);
 
-            // Icon — use the reward's own icon if available, fall back to nothing.
             var iconElement = _root.Q<Image>("RevealIcon");
             if (reward.IconPath != null)
             {
@@ -76,7 +62,7 @@ namespace Agroqirax.Rewards
 
             _root.Q<Button>("OkButton").RegisterCallback<ClickEvent>(_ => Dismiss());
 
-            _panelStack.PushDialog(this);
+            _panelStack.HideAndPushDialog(this);
         }
 
         // ---------------------------------------------------------------
@@ -85,7 +71,6 @@ namespace Agroqirax.Rewards
 
         public VisualElement GetPanel() => _root!;
 
-        /// <summary>OK button / confirm key both close the panel.</summary>
         public bool OnUIConfirmed()
         {
             Dismiss();
@@ -96,6 +81,10 @@ namespace Agroqirax.Rewards
 
         // ---------------------------------------------------------------
 
-        private void Dismiss() => _panelStack.Pop(this);
+        private void Dismiss()
+        {
+            _panelStack.Pop(this);   // pop reveal — selection panel is now on top again
+            _onDismissed?.Invoke();  // pop selection panel
+        }
     }
 }

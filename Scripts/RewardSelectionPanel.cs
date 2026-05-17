@@ -197,9 +197,8 @@ namespace Agroqirax.Rewards
         /// </summary>
         private void ChooseMystery(IReward reward)
         {
-            _panelStack.Pop(this);
             _onChosen?.Invoke(reward);
-            _mysteryRevealPanel.ShowFor(reward);
+            _mysteryRevealPanel.ShowFor(reward, () => _panelStack.Pop(this));
         }
     }
 }
