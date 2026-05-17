@@ -11,7 +11,7 @@ Rewards can:
 - Change the length of seasons
 - Change the beavers needs (i.e. quench thirst / decontaminate instantly)
 - Unlock a building
-- Give you more beavers
+- Give you more beavers or bots
 
 When you select one, that reward gets applied.
 Goods will be delivered to the district center with the largest population.
