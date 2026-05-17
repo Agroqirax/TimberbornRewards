@@ -11,3 +11,9 @@ CycleReward.Need,{0} {1} für alle {2},"{0} = signed delta; {1} = need display n
 CycleReward.BuildingUnlock,{0} freischalten,"{0} = localized building display name"
 CycleReward.Mystery.DisplayName,??? Mysteriöse Belohnung ???,Label shown on the hidden/mystery reward button
 CycleReward.Mystery.RevealTitle,Du hast erhalten,Title shown on the mystery reward reveal popup
+CycleReward.Population.Beaver.DisplayName,{0} Biber,"{0} is the amount"
+CycleReward.Population.Beaver.PluralDisplayName,{0} Biber,"{0} is the amount"
+CycleReward.Population.Child.DisplayName,{0} Kind,"{0} is the amount"
+CycleReward.Population.Child.PluralDisplayName,{0} Kinder,"{0} is the amount"
+CycleReward.Population.Bot.DisplayName,{0} Bot,"{0} is the amount"
+CycleReward.Population.Bot.PluralDisplayName,{0} Bots,"{0} is the amount"

@@ -22,6 +22,7 @@
     "Timberborn.Goods",
     "Timberborn.HazardousWeatherSystem",
     "Timberborn.Localization",
+    "Timberborn.Navigation",
     "Timberborn.NeedSystem",
     "Timberborn.NeedSpecs",
     "Timberborn.ScienceSystem",

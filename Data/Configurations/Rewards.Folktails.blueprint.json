@@ -465,6 +465,66 @@
             { "Cycle": 10, "Multiplier": 1 }
           ]
         }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Beaver",
+        "Amount": 1,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0.3 }
+          ]
+        }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Beaver",
+        "Amount": 3,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Child",
+        "Amount": 1,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0.3 }
+          ]
+        }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Child",
+        "Amount": 3,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Population",
+        "CharacterType": "Bot",
+        "Amount": 1,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 8, "Multiplier": 1 }
+          ]
+        }
       }
     ]
   }

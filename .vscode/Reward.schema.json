@@ -25,7 +25,14 @@
               "Type": {
                 "type": "string",
                 "description": "The reward type",
-                "enum": ["Science", "Resource", "Weather", "Need", "Building"]
+                "enum": [
+                  "Science",
+                  "Resource",
+                  "Weather",
+                  "Need",
+                  "Building",
+                  "Population"
+                ]
               },
               "GoodId": {
                 "type": "string",
@@ -118,7 +125,7 @@
               },
               "Amount": {
                 "type": "number",
-                "description": "The delta amount to change something by\nMust be positive for type: Resource\nMust be int for types: Science, Resource, Weather",
+                "description": "The delta amount to change something by\nMust be positive for type: Resource\nMust be int for types: Science, Resource, Weather, Population",
                 "not": {
                   "const": 0
                 }
@@ -127,6 +134,11 @@
                 "type": "string",
                 "description": "The season to affect",
                 "enum": ["Temperate", "Hazardous"]
+              },
+              "CharacterType": {
+                "type": "string",
+                "description": "The character to spawn",
+                "enum": ["Beaver", "Bot", "Child"]
               },
               "NeedId": {
                 "type": "string",

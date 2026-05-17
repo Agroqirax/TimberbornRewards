@@ -1,6 +1,6 @@
 {
   "Name": "Cycle Rewards",
-  "Version": "0.7",
+  "Version": "0.8",
   "Id": "Agroqirax.Rewards",
   "MinimumGameVersion": "1.0.7.0",
   "Description": "Adds a reward selector at the start of each cycle.",

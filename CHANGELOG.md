@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8] - 2026-05-17
+
+### Added
+
+- Population reward
+
 ## [0.7] - 2026-05-17
 
 ### Changed

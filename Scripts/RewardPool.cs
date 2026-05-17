@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Timberborn.BlueprintSystem;
 using Timberborn.BlockObjectTools;
+using Timberborn.Beavers;
+using Timberborn.Bots;
 using Timberborn.Buildings;
 using Timberborn.EntitySystem;
 using Timberborn.GameCycleSystem;
@@ -44,6 +46,13 @@ namespace Agroqirax.Rewards
         private readonly BuildingUnlockingService        _buildingUnlockingService;
         private readonly ToolUnlockingService            _toolUnlockingService;
         private readonly ToolButtonService               _toolButtonService;
+        private readonly BeaverFactory                   _beaverFactory;
+        private readonly BotFactory                      _botFactory;
+
+        // Shared Random instance passed down to rewards that need randomness
+        // (e.g. PopulationReward spawn offsets) so we don't create a fresh
+        // instance per reward object.
+        private readonly System.Random _random = new System.Random();
 
         /// <summary>Pairs of (reward, entry-spec) built for the current faction.</summary>
         private List<(IReward Reward, RewardEntrySpec Entry)> _entries
@@ -61,7 +70,9 @@ namespace Agroqirax.Rewards
             BuildingService                 buildingService,
             BuildingUnlockingService        buildingUnlockingService,
             ToolUnlockingService            toolUnlockingService,
-            ToolButtonService               toolButtonService)
+            ToolButtonService               toolButtonService,
+            BeaverFactory                   beaverFactory,
+            BotFactory                      botFactory)
         {
             _specService                     = specService;
             _scienceService                  = scienceService;
@@ -75,6 +86,8 @@ namespace Agroqirax.Rewards
             _buildingUnlockingService        = buildingUnlockingService;
             _toolUnlockingService            = toolUnlockingService;
             _toolButtonService               = toolButtonService;
+            _beaverFactory                   = beaverFactory;
+            _botFactory                      = botFactory;
         }
 
         /// <summary>
@@ -199,6 +212,9 @@ namespace Agroqirax.Rewards
 
                 case "Building":
                     return CreateBuildingUnlockReward(entry);
+
+                case "Population":
+                    return CreatePopulationReward(entry);
 
                 default:
                     Debug.LogWarning(
@@ -328,6 +344,39 @@ namespace Agroqirax.Rewards
                 labelSpec.DisplayNameLocKey,
                 templateName,
                 iconPath);
+        }
+
+        private IReward? CreatePopulationReward(RewardEntrySpec entry)
+        {
+            int count = Mathf.RoundToInt(entry.Amount);
+            if (count <= 0)
+            {
+                Debug.LogWarning(
+                    $"[CycleReward] Population reward has Amount {entry.Amount} (rounds to {count}) — " +
+                    "must be a positive integer. Skipping entry.");
+                return null;
+            }
+
+            PopulationCharacterTarget target;
+            switch (entry.CharacterType)
+            {
+                case "Beaver": target = PopulationCharacterTarget.Beaver; break;
+                case "Child":  target = PopulationCharacterTarget.Child;  break;
+                case "Bot":    target = PopulationCharacterTarget.Bot;    break;
+                default:
+                    Debug.LogWarning(
+                        $"[CycleReward] Population reward has unknown CharacterType '{entry.CharacterType}' " +
+                        "(expected \"Beaver\", \"Child\", or \"Bot\") — skipping entry.");
+                    return null;
+            }
+
+            return new PopulationReward(
+                _beaverFactory,
+                _botFactory,
+                _districtCenterRegistry,
+                target,
+                count,
+                _random);
         }
     }
 }
