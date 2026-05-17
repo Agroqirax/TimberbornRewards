@@ -2,26 +2,469 @@
   "FactionRewardSpec": {
     "FactionId": "IronTeeth",
     "Rewards": [
-      { "Type": "Science", "Amount": 100, "Weight": 2 },
-      { "Type": "Science", "Amount": 250, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Log", "Amount": 30, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Plank", "Amount": 25, "Weight": 3 },
-      { "Type": "Resource", "GoodId": "Gear", "Amount": 15, "Weight": 3 },
-      { "Type": "Resource", "GoodId": "Gear", "Amount": 30, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "MetalBlock", "Amount": 8, "Weight": 2 },
       {
         "Type": "Resource",
-        "GoodId": "TreatedPlank",
-        "Amount": 10,
+        "GoodId": "Log",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 5, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Log",
+        "Amount": 50,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 12, "Multiplier": 0.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Log",
+        "Amount": 100,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0.2 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 8, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 35,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 1 },
+            { "Cycle": 8, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 2, "Multiplier": 0.5 },
+            { "Cycle": 6, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Cassava",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 6, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Cassava",
+        "Amount": 35,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 4, "Multiplier": 1 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Cassava",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 6, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 1.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 5,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 2, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 25,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 7, "Multiplier": 1.0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 5,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 2, "Multiplier": 0.2 },
+            { "Cycle": 6, "Multiplier": 1.0 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 25,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0.2 },
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0.1 },
+            { "Cycle": 13, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 50,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 150,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0 },
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 18, "Multiplier": 0.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 350,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 0.5 },
+            { "Cycle": 18, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 800,
+        "Weight": 0.5,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 8, "Multiplier": 0.0 },
+            { "Cycle": 18, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Thirst",
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Thirst",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Hunger",
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Hunger",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Sleep",
         "Weight": 2
       },
-      { "Type": "Resource", "GoodId": "Extract", "Amount": 20, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Cassava", "Amount": 40, "Weight": 2 },
       {
-        "Type": "Resource",
-        "GoodId": "Grease",
-        "Amount": 8,
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Sleep",
         "Weight": 1
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.8,
+        "NeedId": "Campfire",
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "BadwaterContamination",
+        "Weight": 1.5
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Injury",
+        "Weight": 1.5
+      },
+      {
+        "Type": "Weather",
+        "Amount": 1,
+        "Season": "Temperate",
+        "Weight": 2
+      },
+      {
+        "Type": "Weather",
+        "Amount": 3,
+        "Season": "Temperate",
+        "Weight": 1
+      },
+      {
+        "Type": "Weather",
+        "Amount": -1,
+        "Season": "Hazardous",
+        "Weight": 2
+      },
+      {
+        "Type": "Weather",
+        "Amount": -2,
+        "Season": "Hazardous",
+        "Weight": 1
+      },
+      {
+        "Type": "Weather",
+        "Amount": -3,
+        "Season": "Hazardous",
+        "Weight": 0.3
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Forester.IronTeeth",
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 3 },
+            { "Cycle": 4, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "LargeBarrack.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 4, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "DeepBadwaterPump.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 7, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Platform.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 8, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "WeatherStation.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "SwimmingPool.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Lantern.IronTeeth",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Shrub.IronTeeth",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Bench.IronTeeth",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Levee.IronTeeth",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Stairs.IronTeeth",
+        "Weight": 2
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "ContaminationSensor.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 15, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Smelter.IronTeeth",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0 },
+            { "Cycle": 7, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "WoodWorkshop.IronTeeth",
+        "Weight": 0.5,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 5, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
       }
     ]
   }

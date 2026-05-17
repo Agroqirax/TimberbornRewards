@@ -2,13 +2,9 @@
   "ItemId": "3725103123",
   "Name": "Cycle Rewards",
   "Visibility": "Public",
-  "UpdateDescription": true,
-  "UpdateVisibility": true,
-  "UpdatePreview": true,
-  "UpdateTags": true,
-  "Tags": [
-    "Update 1.0",
-    "New content",
-    "Miscellaneous"
-  ]
+  "UpdateDescription": false,
+  "UpdateVisibility": false,
+  "UpdatePreview": false,
+  "UpdateTags": false,
+  "Tags": ["Update 1.0", "New content", "Miscellaneous"]
 }

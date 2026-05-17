@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7] - 2026-05-17
+
+### Changed
+
+- Reworked reward pool
+
 ## [0.6] - 2026-05-16
 
 ### Added

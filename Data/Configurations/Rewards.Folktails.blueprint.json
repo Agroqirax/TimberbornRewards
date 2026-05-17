@@ -2,72 +2,469 @@
   "FactionRewardSpec": {
     "FactionId": "Folktails",
     "Rewards": [
-      { "Type": "Science", "Amount": 100, "Weight": 3 },
-      { "Type": "Science", "Amount": 250, "Weight": 2 },
-      { "Type": "Science", "Amount": 500, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Log", "Amount": 40, "Weight": 3 },
-      { "Type": "Resource", "GoodId": "Log", "Amount": 80, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Plank", "Amount": 20, "Weight": 3 },
-      { "Type": "Resource", "GoodId": "Plank", "Amount": 40, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Carrot", "Amount": 50, "Weight": 3 },
-      { "Type": "Resource", "GoodId": "Berries", "Amount": 50, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Gear", "Amount": 10, "Weight": 2 },
-      { "Type": "Resource", "GoodId": "Gear", "Amount": 20, "Weight": 1 },
-      { "Type": "Resource", "GoodId": "Paper", "Amount": 15, "Weight": 2 },
       {
         "Type": "Resource",
-        "GoodId": "TreatedPlank",
-        "Amount": 6,
-        "Weight": 1
+        "GoodId": "Log",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1.0 },
+            { "Cycle": 5, "Multiplier": 0 }
+          ]
+        }
       },
-      { "Type": "Resource", "GoodId": "MetalBlock", "Amount": 4, "Weight": 1 },
-      { "Type": "Weather", "Season": "Temperate", "Amount": 3, "Weight": 3 },
-      { "Type": "Weather", "Season": "Temperate", "Amount": 5, "Weight": 1 },
       {
-        "Type": "Weather",
-        "Season": "Hazardous",
-        "Amount": -3,
+        "Type": "Resource",
+        "GoodId": "Log",
+        "Amount": 50,
         "Weight": 2,
         "WeightCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.0 },
-            { "Cycle": 5, "Multiplier": 0.0 },
-            { "Cycle": 10, "Multiplier": 1.0 }
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 12, "Multiplier": 0.2 }
           ]
         }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Log",
+        "Amount": 100,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0.2 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 8, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 35,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 1 },
+            { "Cycle": 8, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 2, "Multiplier": 0.5 },
+            { "Cycle": 6, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Carrot",
+        "Amount": 20,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 6, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Carrot",
+        "Amount": 35,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 4, "Multiplier": 1 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Carrot",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 6, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 1.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 5,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 2, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 25,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Plank",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0.5 },
+            { "Cycle": 7, "Multiplier": 1.0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 5,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 2, "Multiplier": 0.2 },
+            { "Cycle": 6, "Multiplier": 1.0 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 25,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0.2 },
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Gear",
+        "Amount": 50,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0.1 },
+            { "Cycle": 13, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 50,
+        "Weight": 3,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 1.0 },
+            { "Cycle": 10, "Multiplier": 0 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 150,
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0 },
+            { "Cycle": 8, "Multiplier": 1 },
+            { "Cycle": 18, "Multiplier": 0.2 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 350,
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 4, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 0.5 },
+            { "Cycle": 18, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Science",
+        "Amount": 800,
+        "Weight": 0.5,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 8, "Multiplier": 0.0 },
+            { "Cycle": 18, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Thirst",
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Thirst",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Hunger",
+        "Weight": 2,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 1 },
+            { "Cycle": 15, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Hunger",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Sleep",
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "Amount": 1,
+        "NeedId": "Sleep",
+        "Weight": 1
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.8,
+        "NeedId": "Campfire",
+        "Weight": 2
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "BadwaterContamination",
+        "Weight": 1.5
+      },
+      {
+        "Type": "Need",
+        "Amount": 0.5,
+        "NeedId": "Injury",
+        "Weight": 1.5
       },
       {
         "Type": "Weather",
-        "Season": "Hazardous",
-        "Amount": -5,
-        "Weight": 1,
-        "WeightCurve": {
-          "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.0 },
-            { "Cycle": 10, "Multiplier": 0.0 },
-            { "Cycle": 20, "Multiplier": 1.0 }
-          ]
-        }
+        "Amount": 1,
+        "Season": "Temperate",
+        "Weight": 2
       },
-      { "Type": "Need", "NeedId": "Sleep", "Amount": 0.5, "Weight": 2 },
-      { "Type": "Need", "NeedId": "Thirst", "Amount": 0.5, "Weight": 2 },
-      { "Type": "Need", "NeedId": "Hunger", "Amount": 0.5, "Weight": 2 },
       {
-        "Type": "Need",
-        "NeedId": "BadwaterContamination",
-        "Amount": 1.0,
-        "Weight": 1,
+        "Type": "Weather",
+        "Amount": 3,
+        "Season": "Temperate",
+        "Weight": 1
+      },
+      {
+        "Type": "Weather",
+        "Amount": -1,
+        "Season": "Hazardous",
+        "Weight": 2
+      },
+      {
+        "Type": "Weather",
+        "Amount": -2,
+        "Season": "Hazardous",
+        "Weight": 1
+      },
+      {
+        "Type": "Weather",
+        "Amount": -3,
+        "Season": "Hazardous",
+        "Weight": 0.3
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Forester.Folktails",
+        "Weight": 2,
         "WeightCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.0 },
-            { "Cycle": 10, "Multiplier": 1.0 }
+            { "Cycle": 1, "Multiplier": 3 },
+            { "Cycle": 4, "Multiplier": 0 }
           ]
         }
       },
       {
         "Type": "Building",
-        "BuildingTemplateName": "Forester.Folktails",
-        "Weight": 5
+        "BuildingTemplateName": "DoubleLodge.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 4, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "LargeWaterPump.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 7, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "AquaticFarmhouse.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 8, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "WeatherStation.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Lido.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 5, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Lantern.Folktails",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Hedge.Folktails",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Beehive.Folktails",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Levee.Folktails",
+        "Weight": 1
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Stairs.Folktails",
+        "Weight": 2
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "ContaminationSensor.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 1, "Multiplier": 0 },
+            { "Cycle": 15, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "Smelter.Folktails",
+        "Weight": 1,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 3, "Multiplier": 0 },
+            { "Cycle": 7, "Multiplier": 1 }
+          ]
+        }
+      },
+      {
+        "Type": "Building",
+        "BuildingTemplateName": "WoodWorkshop.Folktails",
+        "Weight": 0.5,
+        "WeightCurve": {
+          "Keyframes": [
+            { "Cycle": 5, "Multiplier": 0 },
+            { "Cycle": 10, "Multiplier": 1 }
+          ]
+        }
       }
     ]
   }
