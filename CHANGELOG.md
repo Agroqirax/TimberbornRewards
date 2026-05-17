@@ -6,6 +6,10 @@
 
 - Population reward
 
+### Fixed
+
+- Game not unpausing
+
 ## [0.7] - 2026-05-17
 
 ### Changed
