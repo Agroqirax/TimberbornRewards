@@ -14,8 +14,8 @@ namespace Agroqirax.Rewards
         private const string Tag          = "[CycleReward]";
 
         private readonly EventBus              _eventBus;
-        private readonly RewardPool           _rewardPool;
-        private readonly RewardSelectionPanel _selectionPanel;
+        private readonly RewardPool            _rewardPool;
+        private readonly RewardSelectionPanel  _selectionPanel;
         private readonly ILoc                  _loc;
         private readonly FactionService        _factionService;
         private readonly System.Random         _random = new();
@@ -24,13 +24,13 @@ namespace Agroqirax.Rewards
 
         public CycleRewardService(
             EventBus              eventBus,
-            RewardPool           rewardPool,
-            RewardSelectionPanel selectionPanel,
+            RewardPool            rewardPool,
+            RewardSelectionPanel  selectionPanel,
             ILoc                  loc,
             FactionService        factionService)
         {
             _eventBus       = eventBus;
-            _rewardPool    = rewardPool;
+            _rewardPool     = rewardPool;
             _selectionPanel = selectionPanel;
             _loc            = loc;
             _factionService = factionService;
@@ -75,9 +75,8 @@ namespace Agroqirax.Rewards
         /// sampling without replacement.
         ///
         /// Candidates are first filtered to those eligible at <paramref name="cycle"/>
-        /// (i.e. effective weight > 0 after curve evaluation), so entries can be
-        /// completely locked out at certain cycle ranges via their
-        /// <see cref="RewardEntrySpec.WeightCurve"/>.
+        /// (i.e. effective weight > 0 after all curve evaluations), so entries can be
+        /// completely locked out at certain states via their curves.
         ///
         /// Each iteration does a weighted pick from the remaining candidates, removes
         /// the winner, then repeats — so the same reward can never appear twice
@@ -85,7 +84,7 @@ namespace Agroqirax.Rewards
         /// </summary>
         private List<IReward> DrawRewards(int count, int cycle)
         {
-            // Evaluate curves for this cycle and exclude zero-weight entries.
+            // Build context and evaluate all curves. Entries with weight <= 0 excluded.
             List<(IReward Reward, float Weight)> candidates =
                 _rewardPool.GetWeightedForCycle(cycle);
 

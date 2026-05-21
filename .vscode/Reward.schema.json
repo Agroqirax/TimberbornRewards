@@ -1,29 +1,115 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "Reward pool schema",
+  "$id": "https://raw.githubusercontent.com/Agroqirax/TimberbornCycleRewards/refs/heads/master/.vscode/Reward.schema.json",
+  "title": "Reward pool schema",
+  "description": "List of rewards",
   "type": "object",
   "properties": {
     "FactionRewardSpec": {
       "type": "object",
-      "description": "Faction reward spec",
+      "title": "Faction reward spec",
       "properties": {
         "FactionId": {
           "type": "string",
+          "title": "Faction Id",
           "description": "FactionId for this reward pool",
           "examples": ["Folktails", "IronTeeth", "Emberpelts"]
         },
         "Rewards": {
           "type": "array",
           "uniqueItems": true,
-          "description": "Rewards pool",
+          "title": "Rewards",
+          "description": "Reward pool",
           "minItems": 3,
           "items": {
             "required": ["Type", "Weight"],
+            "allOf": [
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": {
+                    "Type": { "const": "Science" }
+                  }
+                },
+                "then": {
+                  "required": ["Amount"],
+                  "properties": {
+                    "Amount": { "type": "integer" }
+                  },
+                  "title": "Science reward",
+                  "description": "Change the amount of science points"
+                }
+              },
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": { "Type": { "const": "Resource" } }
+                },
+                "then": {
+                  "required": ["GoodId", "Amount"],
+                  "properties": {
+                    "Amount": { "type": "integer", "minimum": 0 }
+                  },
+                  "title": "Resource reward",
+                  "description": "Give a certain amount of a resource"
+                }
+              },
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": { "Type": { "const": "Weather" } }
+                },
+                "then": {
+                  "required": ["Season", "Amount"],
+                  "properties": {
+                    "Amount": { "type": "integer" }
+                  },
+                  "title": "Weather reward",
+                  "description": "Change the length of a season\nSeasons cannot become shorter than 1 day"
+                }
+              },
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": { "Type": { "const": "Need" } }
+                },
+                "then": {
+                  "required": ["NeedId", "Amount"],
+                  "title": "Need reward",
+                  "description": "Change how much a specific need is fulfilled for all beavers"
+                }
+              },
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": { "Type": { "const": "Building" } }
+                },
+                "then": {
+                  "required": ["BuildingTemplateName"],
+                  "title": "Building reward",
+                  "description": "Unlock a building"
+                }
+              },
+              {
+                "if": {
+                  "required": ["Type"],
+                  "properties": { "Type": { "const": "Population" } }
+                },
+                "then": {
+                  "required": ["CharacterType", "Amount"],
+                  "properties": {
+                    "Amount": { "type": "integer" }
+                  },
+                  "title": "Population reward",
+                  "description": "Spawn new characters"
+                }
+              }
+            ],
             "type": "object",
-            "title": "Reward",
             "properties": {
               "Type": {
                 "type": "string",
+                "title": "Type",
                 "description": "The reward type",
                 "enum": [
                   "Science",
@@ -35,205 +121,37 @@
                 ]
               },
               "GoodId": {
-                "type": "string",
-                "description": "The GoodId of the good to give",
-                "minLength": 1,
-                "examples": [
-                  "Algae",
-                  "AlgaeRation",
-                  "Antidote",
-                  "Apple",
-                  "AppleJuice",
-                  "ApplePie",
-                  "Badwater",
-                  "BakedBeetroot",
-                  "Beetroot",
-                  "Berries",
-                  "Biofuel",
-                  "Book",
-                  "BotChassis",
-                  "BotHead",
-                  "BotLimb",
-                  "Bread",
-                  "Brick",
-                  "CanolaOil",
-                  "CanolaSeeds",
-                  "Carrot",
-                  "Cassava",
-                  "Catalyst",
-                  "CattailCracker",
-                  "CattailFlour",
-                  "CattailRoot",
-                  "Chestnut",
-                  "Clay",
-                  "Coal",
-                  "Coffee",
-                  "CoffeeBean",
-                  "Corn",
-                  "CornJuice",
-                  "CornRation",
-                  "Cornbread",
-                  "Cornmeal",
-                  "Dandelion",
-                  "Dirt",
-                  "Eggplant",
-                  "EggplantRation",
-                  "Explosives",
-                  "Extract",
-                  "FermentedCassava",
-                  "FermentedMushroom",
-                  "FermentedSoybean",
-                  "Fireworks",
-                  "Fuel",
-                  "Gear",
-                  "Grease",
-                  "GrilledChestnut",
-                  "GrilledCorn",
-                  "GrilledPepper",
-                  "GrilledPotato",
-                  "GrilledSpadderdock",
-                  "Kohlrabi",
-                  "Log",
-                  "Lubricant",
-                  "MangroveFruit",
-                  "MaplePastry",
-                  "MapleSyrup",
-                  "MetalBlock",
-                  "MetalPart",
-                  "Mushroom",
-                  "Paper",
-                  "Pepper",
-                  "PhoenixEssence",
-                  "PineResin",
-                  "Plank",
-                  "Potato",
-                  "PunchCard",
-                  "Radish",
-                  "RedJuice",
-                  "ScrapMetal",
-                  "Soybean",
-                  "Spadderdock",
-                  "StuffedPepper",
-                  "SunflowerSeeds",
-                  "Tomato",
-                  "TomatoJuice",
-                  "TreatedPlank",
-                  "Water",
-                  "Wheat",
-                  "WheatFlour"
-                ]
+                "allOf": [{ "$ref": "#/$defs/GoodId" }],
+                "description": "The GoodId of the good to give"
               },
               "Amount": {
                 "type": "number",
-                "description": "The delta amount to change something by\nMust be positive for type: Resource\nMust be int for types: Science, Resource, Weather, Population",
+                "title": "Amount",
+                "description": "The delta amount to change something by",
                 "not": {
                   "const": 0
                 }
               },
               "Season": {
                 "type": "string",
+                "title": "Season",
                 "description": "The season to affect",
                 "enum": ["Temperate", "Hazardous"]
               },
               "CharacterType": {
                 "type": "string",
-                "description": "The character to spawn",
-                "enum": ["Beaver", "Bot", "Child"]
+                "title": "Character type",
+                "description": "The CharacterType to spawn",
+                "enum": ["Beaver", "Bot", "Child"],
+                "default": "Beaver"
               },
               "NeedId": {
-                "type": "string",
-                "description": "The NeedId of the need to change",
-                "minLength": 1,
-                "examples": [
-                  "Agora",
-                  "AlgaeRation",
-                  "Antidote",
-                  "ApplePie",
-                  "Apples",
-                  "BadwaterContamination",
-                  "BakedBeetroot",
-                  "BeaverBust",
-                  "BeaverStatue",
-                  "BeeSting",
-                  "Bell",
-                  "Biofuel",
-                  "Books",
-                  "Brazier",
-                  "BrazierOfBonding",
-                  "Bread",
-                  "BulletinPole",
-                  "Campfire",
-                  "Carousel",
-                  "Carrots",
-                  "Catalyst",
-                  "CattailCracker",
-                  "ChippedTeeth",
-                  "Coffee",
-                  "ContemplationSpot",
-                  "ControlTower",
-                  "CornJuice",
-                  "CornRation",
-                  "Cornbread",
-                  "DanceHall",
-                  "DecorativeClock",
-                  "Detailer",
-                  "EarthRecultivator",
-                  "EarthRepopulator",
-                  "EggplantRation",
-                  "Energy",
-                  "ExercisePlaza",
-                  "FarmerMonument",
-                  "FermentedCassava",
-                  "FermentedMushroom",
-                  "FermentedSoybean",
-                  "Fire",
-                  "FlameOfUnity",
-                  "FountainOfJoy",
-                  "Fuel",
-                  "Grease",
-                  "GrilledChestnuts",
-                  "GrilledCorn",
-                  "GrilledPeppers",
-                  "GrilledPotatoes",
-                  "GrilledSpadderdock",
-                  "Hunger",
-                  "Injury",
-                  "Juice",
-                  "Kohlrabi",
-                  "LaborerMonument",
-                  "Lantern",
-                  "Lido",
-                  "Lubricant",
-                  "MangroveFruit",
-                  "MaplePastry",
-                  "Motivatorium",
-                  "MudBath",
-                  "MudPit",
-                  "PunchCard",
-                  "Radishes",
-                  "RedJuice",
-                  "Roof",
-                  "RooftopTerrace",
-                  "Scarecrow",
-                  "Scratcher",
-                  "Shelter",
-                  "Shrub",
-                  "Sleep",
-                  "StuffedPeppers",
-                  "SunflowerSeeds",
-                  "SwimmingPool",
-                  "Thirst",
-                  "Tomatoes",
-                  "TributeToIngenuity",
-                  "Weathervane",
-                  "WetFur",
-                  "WetFurBad",
-                  "WindTunnel",
-                  "WonderEmberpelts"
-                ]
+                "allOf": [{ "$ref": "#/$defs/NeedId" }],
+                "description": "The NeedId of the need to change"
               },
               "BuildingTemplateName": {
                 "type": "string",
+                "title": "Building Template Name",
                 "description": "The TemplateName of the building to unlock",
                 "minLength": 1,
                 "examples": [
@@ -746,37 +664,137 @@
               },
               "Weight": {
                 "type": "number",
+                "title": "Weight",
                 "description": "The base weight",
                 "exclusiveMinimum": 0,
                 "default": 1
               },
-              "WeightCurve": {
+              "CycleCurve": {
                 "type": "object",
-                "description": "Weight curve",
+                "title": "Cycle Curve",
+                "description": "Change base weight based on the cycle number",
+                "required": ["Keyframes"],
                 "properties": {
                   "Keyframes": {
-                    "type": "array",
+                    "allOf": [{ "$ref": "#/$defs/Keyframes" }],
+                    "title": "Keyframes",
                     "description": "List of keyframes",
-                    "uniqueItems": true,
-                    "minItems": 2,
                     "items": {
-                      "required": ["Cycle", "Multiplier"],
                       "properties": {
-                        "Cycle": {
+                        "Value": {
                           "type": "integer",
                           "description": "Cycle number",
-                          "minimum": 1
-                        },
-                        "Multiplier": {
-                          "type": "number",
-                          "description": "Weight multiplier",
+                          "minimum": 2
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "GoodCurve": {
+                "type": "object",
+                "title": "Good Curve",
+                "description": "Change the base weight based on the number of a certain good",
+                "required": ["GoodId", "Keyframes"],
+                "properties": {
+                  "GoodId": {
+                    "allOf": [{ "$ref": "#/$defs/GoodId" }],
+                    "description": "The GoodId to evaluate"
+                  },
+                  "Keyframes": {
+                    "allOf": [{ "$ref": "#/$defs/Keyframes" }],
+                    "title": "Keyframes",
+                    "description": "List of keyframes",
+                    "items": {
+                      "properties": {
+                        "Value": {
+                          "type": "integer",
+                          "description": "Good amount",
                           "minimum": 0
                         }
                       }
                     }
                   }
                 },
-                "required": ["Keyframes"]
+                "additionalProperties": false
+              },
+              "NeedCurve": {
+                "type": "object",
+                "title": "Need curve",
+                "description": "Evaluates based on the average need value for the specified need from all characters",
+                "required": ["NeedId", "Keyframes"],
+                "properties": {
+                  "NeedId": {
+                    "allOf": [{ "$ref": "#/$defs/NeedId" }],
+                    "description": "The NeedId to evaluate."
+                  },
+                  "Keyframes": {
+                    "allOf": [{ "$ref": "#/$defs/Keyframes" }],
+                    "title": "Keyframes",
+                    "description": "List of keyframes",
+                    "items": {
+                      "properties": {
+                        "Value": {
+                          "description": "Need value"
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "ScienceCurve": {
+                "type": "object",
+                "title": "Science curve",
+                "description": "Change the base weight based on the number of SP",
+                "required": ["Keyframes"],
+                "properties": {
+                  "Keyframes": {
+                    "allOf": [{ "$ref": "#/$defs/Keyframes" }],
+                    "title": "Keyframes",
+                    "description": "List of keyframes",
+                    "items": {
+                      "properties": {
+                        "Value": {
+                          "type": "integer",
+                          "description": "Science amount"
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "PopulationCurve": {
+                "type": "object",
+                "title": "Population curve",
+                "description": "Change the base weight based on the population count",
+                "required": ["CharacterType", "Keyframes"],
+                "properties": {
+                  "CharacterType": {
+                    "type": "string",
+                    "title": "Character type",
+                    "description": "The CharacterType to evaluate",
+                    "enum": ["Beaver", "Bot", "Child", "Contaminated"],
+                    "default": "Beaver"
+                  },
+                  "Keyframes": {
+                    "allOf": [{ "$ref": "#/$defs/Keyframes" }],
+                    "title": "Keyframes",
+                    "description": "List of keyframes",
+                    "items": {
+                      "properties": {
+                        "Value": {
+                          "type": "integer",
+                          "description": "Good amount",
+                          "minimum": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
               }
             },
             "additionalProperties": false
@@ -784,7 +802,216 @@
         }
       },
       "required": ["FactionId", "Rewards"]
-    }
+    },
+    "additionalProperties": false
   },
-  "required": ["FactionRewardSpec"]
+  "additionalProperties": false,
+  "required": ["FactionRewardSpec"],
+  "$defs": {
+    "GoodId": {
+      "type": "string",
+      "title": "Good Id",
+      "minLength": 1,
+      "examples": [
+        "Algae",
+        "AlgaeRation",
+        "Antidote",
+        "Apple",
+        "AppleJuice",
+        "ApplePie",
+        "Badwater",
+        "BakedBeetroot",
+        "Beetroot",
+        "Berries",
+        "Biofuel",
+        "Book",
+        "BotChassis",
+        "BotHead",
+        "BotLimb",
+        "Bread",
+        "Brick",
+        "CanolaOil",
+        "CanolaSeeds",
+        "Carrot",
+        "Cassava",
+        "Catalyst",
+        "CattailCracker",
+        "CattailFlour",
+        "CattailRoot",
+        "Chestnut",
+        "Clay",
+        "Coal",
+        "Coffee",
+        "CoffeeBean",
+        "Corn",
+        "CornJuice",
+        "CornRation",
+        "Cornbread",
+        "Cornmeal",
+        "Dandelion",
+        "Dirt",
+        "Eggplant",
+        "EggplantRation",
+        "Explosives",
+        "Extract",
+        "FermentedCassava",
+        "FermentedMushroom",
+        "FermentedSoybean",
+        "Fireworks",
+        "Fuel",
+        "Gear",
+        "Grease",
+        "GrilledChestnut",
+        "GrilledCorn",
+        "GrilledPepper",
+        "GrilledPotato",
+        "GrilledSpadderdock",
+        "Kohlrabi",
+        "Log",
+        "Lubricant",
+        "MangroveFruit",
+        "MaplePastry",
+        "MapleSyrup",
+        "MetalBlock",
+        "MetalPart",
+        "Mushroom",
+        "Paper",
+        "Pepper",
+        "PhoenixEssence",
+        "PineResin",
+        "Plank",
+        "Potato",
+        "PunchCard",
+        "Radish",
+        "RedJuice",
+        "ScrapMetal",
+        "Soybean",
+        "Spadderdock",
+        "StuffedPepper",
+        "SunflowerSeeds",
+        "Tomato",
+        "TomatoJuice",
+        "TreatedPlank",
+        "Water",
+        "Wheat",
+        "WheatFlour"
+      ]
+    },
+    "NeedId": {
+      "type": "string",
+      "title": "Need Id",
+      "minLength": 1,
+      "examples": [
+        "Agora",
+        "AlgaeRation",
+        "Antidote",
+        "ApplePie",
+        "Apples",
+        "BadwaterContamination",
+        "BakedBeetroot",
+        "BeaverBust",
+        "BeaverStatue",
+        "BeeSting",
+        "Bell",
+        "Biofuel",
+        "Books",
+        "Brazier",
+        "BrazierOfBonding",
+        "Bread",
+        "BulletinPole",
+        "Campfire",
+        "Carousel",
+        "Carrots",
+        "Catalyst",
+        "CattailCracker",
+        "ChippedTeeth",
+        "Coffee",
+        "ContemplationSpot",
+        "ControlTower",
+        "CornJuice",
+        "CornRation",
+        "Cornbread",
+        "DanceHall",
+        "DecorativeClock",
+        "Detailer",
+        "EarthRecultivator",
+        "EarthRepopulator",
+        "EggplantRation",
+        "Energy",
+        "ExercisePlaza",
+        "FarmerMonument",
+        "FermentedCassava",
+        "FermentedMushroom",
+        "FermentedSoybean",
+        "Fire",
+        "FlameOfUnity",
+        "FountainOfJoy",
+        "Fuel",
+        "Grease",
+        "GrilledChestnuts",
+        "GrilledCorn",
+        "GrilledPeppers",
+        "GrilledPotatoes",
+        "GrilledSpadderdock",
+        "Hunger",
+        "Injury",
+        "Juice",
+        "Kohlrabi",
+        "LaborerMonument",
+        "Lantern",
+        "Lido",
+        "Lubricant",
+        "MangroveFruit",
+        "MaplePastry",
+        "Motivatorium",
+        "MudBath",
+        "MudPit",
+        "PunchCard",
+        "Radishes",
+        "RedJuice",
+        "Roof",
+        "RooftopTerrace",
+        "Scarecrow",
+        "Scratcher",
+        "Shelter",
+        "Shrub",
+        "Sleep",
+        "StuffedPeppers",
+        "SunflowerSeeds",
+        "SwimmingPool",
+        "Thirst",
+        "Tomatoes",
+        "TributeToIngenuity",
+        "Weathervane",
+        "WetFur",
+        "WetFurBad",
+        "WindTunnel",
+        "WonderEmberpelts"
+      ]
+    },
+    "Keyframes": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "title": "Keyframe",
+        "required": ["Value", "Multiplier"],
+        "properties": {
+          "Value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "Multiplier": {
+            "type": "number",
+            "title": "Multiplier",
+            "description": "Weight multiplier",
+            "minimum": 0,
+            "default": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
 }

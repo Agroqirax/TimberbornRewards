@@ -13,6 +13,7 @@ using Timberborn.GameFactionSystem;
 using Timberborn.Goods;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.NeedSpecs;
+using Timberborn.ResourceCountingSystem;
 using Timberborn.ScienceSystem;
 using Timberborn.WeatherSystem;
 using Timberborn.TemplateSystem;
@@ -26,8 +27,8 @@ namespace Agroqirax.Rewards
     /// Builds and holds the list of rewards for the current faction.
     ///
     /// Weights are NOT baked at load time; call <see cref="GetWeightedForCycle"/>
-    /// each draw so that <see cref="RewardEntrySpec.WeightCurve"/> can vary the
-    /// effective weight (and eligibility) per cycle.
+    /// each draw so that all curve types can vary the effective weight (and
+    /// eligibility) per draw based on current game state.
     ///
     /// For <c>Building</c> rewards, entries whose building is already unlocked are
     /// excluded from the draw entirely — they would be meaningless to offer.
@@ -48,10 +49,9 @@ namespace Agroqirax.Rewards
         private readonly ToolButtonService               _toolButtonService;
         private readonly BeaverFactory                   _beaverFactory;
         private readonly BotFactory                      _botFactory;
+        private readonly ResourceCountingService         _resourceCountingService;
 
-        // Shared Random instance passed down to rewards that need randomness
-        // (e.g. PopulationReward spawn offsets) so we don't create a fresh
-        // instance per reward object.
+        // Shared Random instance passed down to rewards that need randomness.
         private readonly System.Random _random = new System.Random();
 
         /// <summary>Pairs of (reward, entry-spec) built for the current faction.</summary>
@@ -72,7 +72,8 @@ namespace Agroqirax.Rewards
             ToolUnlockingService            toolUnlockingService,
             ToolButtonService               toolButtonService,
             BeaverFactory                   beaverFactory,
-            BotFactory                      botFactory)
+            BotFactory                      botFactory,
+            ResourceCountingService         resourceCountingService)
         {
             _specService                     = specService;
             _scienceService                  = scienceService;
@@ -88,6 +89,7 @@ namespace Agroqirax.Rewards
             _toolButtonService               = toolButtonService;
             _beaverFactory                   = beaverFactory;
             _botFactory                      = botFactory;
+            _resourceCountingService         = resourceCountingService;
         }
 
         /// <summary>
@@ -104,17 +106,22 @@ namespace Agroqirax.Rewards
         /// Returns (reward, weight) pairs eligible for the given cycle.
         /// Entries are excluded when:
         /// <list type="bullet">
-        ///   <item>their effective weight evaluates to &lt;= 0 for this cycle, or</item>
+        ///   <item>their effective weight evaluates to &lt;= 0 for this draw, or</item>
         ///   <item>they are a <see cref="BuildingUnlockReward"/> for a building the
         ///         player has already unlocked.</item>
         /// </list>
+        /// A <see cref="CurveContext"/> is built once per call and shared across
+        /// all entry evaluations; resolver caches ensure each game-state query
+        /// (good amount, need average, population count) is performed at most once.
         /// </summary>
         public List<(IReward Reward, float Weight)> GetWeightedForCycle(int cycle)
         {
+            CurveContext context = BuildContext(cycle);
+
             var result = new List<(IReward, float)>(_entries.Count);
             foreach (var (reward, entry) in _entries)
             {
-                float w = entry.GetWeightAt(cycle);
+                float w = entry.GetWeightAt(context);
                 if (w <= 0f)
                     continue;
 
@@ -132,6 +139,18 @@ namespace Agroqirax.Rewards
         // Private helpers
         // ---------------------------------------------------------------
 
+        /// <summary>
+        /// Builds a <see cref="CurveContext"/> for the current frame.
+        /// Resolver instances are created fresh each draw so their per-draw
+        /// caches are clean.
+        /// </summary>
+        private CurveContext BuildContext(int cycle) => new CurveContext(
+            cycle:         cycle,
+            sciencePoints: _scienceService.SciencePoints,
+            goods:         new GoodAmountResolver(_resourceCountingService),
+            needs:         new NeedAverageResolver(_districtCenterRegistry),
+            population:    new PopulationCountResolver(_districtCenterRegistry));
+
         private bool IsAlreadyUnlocked(string templateName)
         {
             if (string.IsNullOrEmpty(templateName))
@@ -143,7 +162,6 @@ namespace Agroqirax.Rewards
             }
             catch
             {
-                // GetBuildingTemplate throws if the name isn't found; treat as not unlocked.
                 return false;
             }
         }
@@ -184,7 +202,7 @@ namespace Agroqirax.Rewards
             switch (entry.Type)
             {
                 case "Science":
-                    return new SciencePointReward(_scienceService, Mathf.RoundToInt(entry.Amount));
+                    return new SciencePointReward(_scienceService, UnityEngine.Mathf.RoundToInt(entry.Amount));
 
                 case "Resource":
                 {
@@ -197,11 +215,11 @@ namespace Agroqirax.Rewards
                     }
                     return new ResourceReward(
                         _districtCenterRegistry,
-                        goodId:             entry.GoodId,
-                        amount:             Mathf.RoundToInt(entry.Amount),
-                        displayName:        goodSpec.DisplayName.Value,
-                        pluralDisplayName:  goodSpec.PluralDisplayName.Value,
-                        iconPath:           goodSpec.Icon.Path);
+                        goodId:            entry.GoodId,
+                        amount:            UnityEngine.Mathf.RoundToInt(entry.Amount),
+                        displayName:       goodSpec.DisplayName.Value,
+                        pluralDisplayName: goodSpec.PluralDisplayName.Value,
+                        iconPath:          goodSpec.Icon.Path);
                 }
 
                 case "Weather":
@@ -248,7 +266,7 @@ namespace Agroqirax.Rewards
                 _hazardousWeatherService,
                 _gameCycleService,
                 season,
-                Mathf.RoundToInt(entry.Amount));
+                UnityEngine.Mathf.RoundToInt(entry.Amount));
         }
 
         private IReward? CreateNeedReward(RewardEntrySpec entry)
@@ -315,8 +333,6 @@ namespace Agroqirax.Rewards
                 return null;
             }
 
-            // Buildings with ScienceCost == 0 are always free; offering an
-            // "unlock" for them would be meaningless.
             if (buildingSpec.ScienceCost == 0)
             {
                 Debug.LogWarning(
@@ -333,7 +349,7 @@ namespace Agroqirax.Rewards
                 return null;
             }
 
-            string? iconPath = string.IsNullOrEmpty(labelSpec.Icon.Path) ? null : labelSpec.Icon.Path;
+            string? iconPath    = string.IsNullOrEmpty(labelSpec.Icon.Path) ? null : labelSpec.Icon.Path;
             string templateName = _buildingService.GetTemplateName(buildingSpec);
 
             return new BuildingUnlockReward(
@@ -348,7 +364,7 @@ namespace Agroqirax.Rewards
 
         private IReward? CreatePopulationReward(RewardEntrySpec entry)
         {
-            int count = Mathf.RoundToInt(entry.Amount);
+            int count = UnityEngine.Mathf.RoundToInt(entry.Amount);
             if (count <= 0)
             {
                 Debug.LogWarning(

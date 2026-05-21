@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9] - 2026-05-18
+
+### Added
+
+- Add more weight curves
+
 ## [0.8] - 2026-05-17
 
 ### Added
@@ -8,7 +14,7 @@
 
 ### Fixed
 
-- Game not unpausing
+- Game unpausing
 
 ## [0.7] - 2026-05-17
 

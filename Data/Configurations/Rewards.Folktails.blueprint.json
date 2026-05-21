@@ -7,10 +7,11 @@
         "GoodId": "Log",
         "Amount": 20,
         "Weight": 3,
-        "WeightCurve": {
+        "GoodCurve": {
+          "GoodId": "Log",
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1.0 },
-            { "Cycle": 5, "Multiplier": 0 }
+            { "Value": 15, "Multiplier": 1 },
+            { "Value": 25, "Multiplier": 0 }
           ]
         }
       },
@@ -19,10 +20,12 @@
         "GoodId": "Log",
         "Amount": 50,
         "Weight": 2,
-        "WeightCurve": {
+        "GoodCurve": {
+          "GoodId": "Log",
           "Keyframes": [
-            { "Cycle": 8, "Multiplier": 1 },
-            { "Cycle": 12, "Multiplier": 0.2 }
+            { "Value": 10, "Multiplier": 0 },
+            { "Value": 25, "Multiplier": 1 },
+            { "Value": 40, "Multiplier": 0.5 }
           ]
         }
       },
@@ -31,22 +34,11 @@
         "GoodId": "Log",
         "Amount": 100,
         "Weight": 1,
-        "WeightCurve": {
+        "GoodCurve": {
+          "GoodId": "Log",
           "Keyframes": [
-            { "Cycle": 3, "Multiplier": 0.2 },
-            { "Cycle": 10, "Multiplier": 1 }
-          ]
-        }
-      },
-      {
-        "Type": "Resource",
-        "GoodId": "Water",
-        "Amount": 20,
-        "Weight": 3,
-        "WeightCurve": {
-          "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1 },
-            { "Cycle": 8, "Multiplier": 0 }
+            { "Value": 25, "Multiplier": 0 },
+            { "Value": 35, "Multiplier": 1 }
           ]
         }
       },
@@ -54,11 +46,13 @@
         "Type": "Resource",
         "GoodId": "Water",
         "Amount": 35,
-        "Weight": 2,
-        "WeightCurve": {
+        "Weight": 3,
+        "GoodCurve": {
+          "GoodId": "Water",
           "Keyframes": [
-            { "Cycle": 3, "Multiplier": 1 },
-            { "Cycle": 8, "Multiplier": 0.5 }
+            { "Value": 30, "Multiplier": 1 },
+            { "Value": 55, "Multiplier": 0.5 },
+            { "Value": 65, "Multiplier": 0 }
           ]
         }
       },
@@ -66,11 +60,27 @@
         "Type": "Resource",
         "GoodId": "Water",
         "Amount": 50,
-        "Weight": 1,
-        "WeightCurve": {
+        "Weight": 2,
+        "GoodCurve": {
+          "GoodId": "Water",
           "Keyframes": [
-            { "Cycle": 2, "Multiplier": 0.5 },
-            { "Cycle": 6, "Multiplier": 1 }
+            { "Value": 35, "Multiplier": 0.2 },
+            { "Value": 50, "Multiplier": 1 },
+            { "Value": 100, "Multiplier": 0.5 }
+          ]
+        }
+      },
+      {
+        "Type": "Resource",
+        "GoodId": "Water",
+        "Amount": 100,
+        "Weight": 1,
+        "GoodCurve": {
+          "GoodId": "Water",
+          "Keyframes": [
+            { "Value": 2, "Multiplier": 0.1 },
+            { "Value": 35, "Multiplier": 0.1 },
+            { "Value": 100, "Multiplier": 1 }
           ]
         }
       },
@@ -79,10 +89,10 @@
         "GoodId": "Carrot",
         "Amount": 20,
         "Weight": 3,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1 },
-            { "Cycle": 6, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 1 },
+            { "Value": 6, "Multiplier": 0 }
           ]
         }
       },
@@ -91,11 +101,11 @@
         "GoodId": "Carrot",
         "Amount": 35,
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.5 },
-            { "Cycle": 4, "Multiplier": 1 },
-            { "Cycle": 10, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 0.5 },
+            { "Value": 4, "Multiplier": 1 },
+            { "Value": 10, "Multiplier": 0 }
           ]
         }
       },
@@ -104,11 +114,11 @@
         "GoodId": "Carrot",
         "Amount": 50,
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.5 },
-            { "Cycle": 6, "Multiplier": 1 },
-            { "Cycle": 15, "Multiplier": 1.2 }
+            { "Value": 2, "Multiplier": 0.5 },
+            { "Value": 6, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 1 }
           ]
         }
       },
@@ -117,11 +127,11 @@
         "GoodId": "Plank",
         "Amount": 5,
         "Weight": 3,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 2, "Multiplier": 1.0 },
-            { "Cycle": 10, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 5, "Multiplier": 1 },
+            { "Value": 10, "Multiplier": 0 }
           ]
         }
       },
@@ -130,11 +140,11 @@
         "GoodId": "Plank",
         "Amount": 25,
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 5, "Multiplier": 1 },
-            { "Cycle": 15, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 5, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 0 }
           ]
         }
       },
@@ -143,10 +153,10 @@
         "GoodId": "Plank",
         "Amount": 50,
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0.5 },
-            { "Cycle": 7, "Multiplier": 1.0 }
+            { "Value": 2, "Multiplier": 0.5 },
+            { "Value": 7, "Multiplier": 1 }
           ]
         }
       },
@@ -155,11 +165,11 @@
         "GoodId": "Gear",
         "Amount": 5,
         "Weight": 3,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 2, "Multiplier": 0.2 },
-            { "Cycle": 6, "Multiplier": 1.0 },
-            { "Cycle": 15, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 0.2 },
+            { "Value": 6, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 0 }
           ]
         }
       },
@@ -168,11 +178,11 @@
         "GoodId": "Gear",
         "Amount": 25,
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 4, "Multiplier": 0.2 },
-            { "Cycle": 8, "Multiplier": 1 },
-            { "Cycle": 15, "Multiplier": 0 }
+            { "Value": 4, "Multiplier": 0.2 },
+            { "Value": 8, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 0 }
           ]
         }
       },
@@ -181,10 +191,10 @@
         "GoodId": "Gear",
         "Amount": 50,
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 4, "Multiplier": 0.1 },
-            { "Cycle": 13, "Multiplier": 1 }
+            { "Value": 4, "Multiplier": 0.1 },
+            { "Value": 13, "Multiplier": 1 }
           ]
         }
       },
@@ -192,10 +202,10 @@
         "Type": "Science",
         "Amount": 50,
         "Weight": 3,
-        "WeightCurve": {
+        "ScienceCurve": {
           "Keyframes": [
-            { "Cycle": 4, "Multiplier": 1.0 },
-            { "Cycle": 10, "Multiplier": 0 }
+            { "Value": 10, "Multiplier": 1 },
+            { "Value": 100, "Multiplier": 0 }
           ]
         }
       },
@@ -203,11 +213,12 @@
         "Type": "Science",
         "Amount": 150,
         "Weight": 2,
-        "WeightCurve": {
+        "ScienceCurve": {
           "Keyframes": [
-            { "Cycle": 3, "Multiplier": 0 },
-            { "Cycle": 8, "Multiplier": 1 },
-            { "Cycle": 18, "Multiplier": 0.2 }
+            { "Value": 80, "Multiplier": 0.5 },
+            { "Value": 150, "Multiplier": 1 },
+            { "Value": 250, "Multiplier": 1 },
+            { "Value": 400, "Multiplier": 0.1 }
           ]
         }
       },
@@ -215,11 +226,16 @@
         "Type": "Science",
         "Amount": 350,
         "Weight": 1,
-        "WeightCurve": {
+        "ScienceCurve": {
           "Keyframes": [
-            { "Cycle": 4, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 0.5 },
-            { "Cycle": 18, "Multiplier": 1 }
+            { "Value": 300, "Multiplier": 0.2 },
+            { "Value": 600, "Multiplier": 1 }
+          ]
+        },
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 5, "Multiplier": 0 },
+            { "Value": 15, "Multiplier": 1 }
           ]
         }
       },
@@ -227,10 +243,16 @@
         "Type": "Science",
         "Amount": 800,
         "Weight": 0.5,
-        "WeightCurve": {
+        "ScienceCurve": {
           "Keyframes": [
-            { "Cycle": 8, "Multiplier": 0.0 },
-            { "Cycle": 18, "Multiplier": 1 }
+            { "Value": 600, "Multiplier": 0 },
+            { "Value": 950, "Multiplier": 1 }
+          ]
+        },
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 15, "Multiplier": 0 },
+            { "Value": 25, "Multiplier": 1 }
           ]
         }
       },
@@ -239,10 +261,10 @@
         "Amount": 0.5,
         "NeedId": "Thirst",
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1 },
-            { "Cycle": 15, "Multiplier": 0.5 }
+            { "Value": 2, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 0.5 }
           ]
         }
       },
@@ -251,10 +273,10 @@
         "Amount": 1,
         "NeedId": "Thirst",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 10, "Multiplier": 1 }
           ]
         }
       },
@@ -263,10 +285,10 @@
         "Amount": 0.5,
         "NeedId": "Hunger",
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1 },
-            { "Cycle": 15, "Multiplier": 0.5 }
+            { "Value": 2, "Multiplier": 1 },
+            { "Value": 15, "Multiplier": 0.5 }
           ]
         }
       },
@@ -275,10 +297,10 @@
         "Amount": 1,
         "NeedId": "Hunger",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 10, "Multiplier": 1 }
           ]
         }
       },
@@ -304,7 +326,14 @@
         "Type": "Need",
         "Amount": 0.5,
         "NeedId": "BadwaterContamination",
-        "Weight": 1.5
+        "Weight": 1.5,
+        "PopulationCurve": {
+          "CharacterType": "Contaminated",
+          "Keyframes": [
+            { "Value": 0, "Multiplier": 0 },
+            { "Value": 4, "Multiplier": 1 }
+          ]
+        }
       },
       {
         "Type": "Need",
@@ -316,25 +345,49 @@
         "Type": "Weather",
         "Amount": 1,
         "Season": "Temperate",
-        "Weight": 2
+        "Weight": 2,
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 10, "Multiplier": 1 },
+            { "Value": 20, "Multiplier": 0.5 }
+          ]
+        }
       },
       {
         "Type": "Weather",
         "Amount": 3,
         "Season": "Temperate",
-        "Weight": 1
+        "Weight": 1,
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 10, "Multiplier": 0 },
+            { "Value": 20, "Multiplier": 1 }
+          ]
+        }
       },
       {
         "Type": "Weather",
         "Amount": -1,
         "Season": "Hazardous",
-        "Weight": 2
+        "Weight": 2,
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 10, "Multiplier": 1 },
+            { "Value": 20, "Multiplier": 0.5 }
+          ]
+        }
       },
       {
         "Type": "Weather",
         "Amount": -2,
         "Season": "Hazardous",
-        "Weight": 1
+        "Weight": 1,
+        "CycleCurve": {
+          "Keyframes": [
+            { "Value": 10, "Multiplier": 0 },
+            { "Value": 20, "Multiplier": 1 }
+          ]
+        }
       },
       {
         "Type": "Weather",
@@ -346,10 +399,10 @@
         "Type": "Building",
         "BuildingTemplateName": "Forester.Folktails",
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 3 },
-            { "Cycle": 4, "Multiplier": 0 }
+            { "Value": 2, "Multiplier": 3 },
+            { "Value": 4, "Multiplier": 0 }
           ]
         }
       },
@@ -357,10 +410,17 @@
         "Type": "Building",
         "BuildingTemplateName": "DoubleLodge.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 4, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 4, "Multiplier": 1 }
+          ]
+        },
+        "PopulationCurve": {
+          "CharacterType": "Beaver",
+          "Keyframes": [
+            { "Value": 20, "Multiplier": 0 },
+            { "Value": 30, "Multiplier": 1 }
           ]
         }
       },
@@ -368,10 +428,10 @@
         "Type": "Building",
         "BuildingTemplateName": "LargeWaterPump.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 7, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 7, "Multiplier": 1 }
           ]
         }
       },
@@ -379,10 +439,17 @@
         "Type": "Building",
         "BuildingTemplateName": "AquaticFarmhouse.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 8, "Multiplier": 1 }
+            { "Value": 10, "Multiplier": 0 },
+            { "Value": 20, "Multiplier": 1 }
+          ]
+        },
+        "PopulationCurve": {
+          "CharacterType": "Beaver",
+          "Keyframes": [
+            { "Value": 25, "Multiplier": 0 },
+            { "Value": 35, "Multiplier": 1 }
           ]
         }
       },
@@ -390,10 +457,10 @@
         "Type": "Building",
         "BuildingTemplateName": "WeatherStation.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 10, "Multiplier": 1 }
           ]
         }
       },
@@ -401,10 +468,17 @@
         "Type": "Building",
         "BuildingTemplateName": "Lido.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 5, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 5, "Multiplier": 1 }
+          ]
+        },
+        "NeedCurve": {
+          "NeedId": "WetFur",
+          "Keyframes": [
+            { "Value": 0, "Multiplier": 1 },
+            { "Value": 1, "Multiplier": 0.2 }
           ]
         }
       },
@@ -437,10 +511,10 @@
         "Type": "Building",
         "BuildingTemplateName": "ContaminationSensor.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 15, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 15, "Multiplier": 1 }
           ]
         }
       },
@@ -448,10 +522,10 @@
         "Type": "Building",
         "BuildingTemplateName": "Smelter.Folktails",
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 3, "Multiplier": 0 },
-            { "Cycle": 7, "Multiplier": 1 }
+            { "Value": 3, "Multiplier": 0 },
+            { "Value": 7, "Multiplier": 1 }
           ]
         }
       },
@@ -459,10 +533,10 @@
         "Type": "Building",
         "BuildingTemplateName": "WoodWorkshop.Folktails",
         "Weight": 0.5,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 5, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 1 }
+            { "Value": 5, "Multiplier": 0 },
+            { "Value": 10, "Multiplier": 1 }
           ]
         }
       },
@@ -471,10 +545,10 @@
         "CharacterType": "Beaver",
         "Amount": 1,
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1.0 },
-            { "Cycle": 10, "Multiplier": 0.3 }
+            { "Value": 2, "Multiplier": 1 },
+            { "Value": 10, "Multiplier": 0.3 }
           ]
         }
       },
@@ -483,10 +557,10 @@
         "CharacterType": "Beaver",
         "Amount": 3,
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 5, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 5, "Multiplier": 1 }
           ]
         }
       },
@@ -495,10 +569,10 @@
         "CharacterType": "Child",
         "Amount": 1,
         "Weight": 2,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 1.0 },
-            { "Cycle": 10, "Multiplier": 0.3 }
+            { "Value": 2, "Multiplier": 1 },
+            { "Value": 10, "Multiplier": 0.3 }
           ]
         }
       },
@@ -507,10 +581,10 @@
         "CharacterType": "Child",
         "Amount": 3,
         "Weight": 1,
-        "WeightCurve": {
+        "CycleCurve": {
           "Keyframes": [
-            { "Cycle": 1, "Multiplier": 0 },
-            { "Cycle": 5, "Multiplier": 1 }
+            { "Value": 2, "Multiplier": 0 },
+            { "Value": 5, "Multiplier": 1 }
           ]
         }
       },
@@ -518,12 +592,12 @@
         "Type": "Population",
         "CharacterType": "Bot",
         "Amount": 1,
-        "Weight": 1,
-        "WeightCurve": {
+        "Weight": 2,
+        "PopulationCurve": {
+          "CharacterType": "Bot",
           "Keyframes": [
-            { "Cycle": 5, "Multiplier": 0 },
-            { "Cycle": 10, "Multiplier": 1 },
-            { "Cycle": 20, "Multiplier": 0 }
+            { "Value": 0, "Multiplier": 0.5 },
+            { "Value": 5, "Multiplier": 1 }
           ]
         }
       },
@@ -532,10 +606,11 @@
         "CharacterType": "Bot",
         "Amount": 3,
         "Weight": 1,
-        "WeightCurve": {
+        "PopulationCurve": {
+          "CharacterType": "Bot",
           "Keyframes": [
-            { "Cycle": 8, "Multiplier": 0 },
-            { "Cycle": 13, "Multiplier": 1 }
+            { "Value": 8, "Multiplier": 0 },
+            { "Value": 13, "Multiplier": 1 }
           ]
         }
       }
